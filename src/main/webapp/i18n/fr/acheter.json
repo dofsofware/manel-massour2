@@ -1,0 +1,23 @@
+{
+  "buntuApp": {
+    "acheter": {
+      "home": {
+        "title": "Acheters",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Acheter",
+        "createOrEditLabel": "Créer ou éditer un Acheter",
+        "notFound": "Aucun Acheter trouvé"
+      },
+      "created": "Un nouveau Acheter a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Acheter avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Acheter avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Acheter {{ id }} ?"
+      },
+      "detail": {
+        "title": "Acheter"
+      },
+      "id": "ID"
+    }
+  }
+}

@@ -48,6 +48,13 @@ public class CacheConfiguration {
             createCache(cm, com.techxel.buntu.domain.User.class.getName());
             createCache(cm, com.techxel.buntu.domain.Authority.class.getName());
             createCache(cm, com.techxel.buntu.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.techxel.buntu.domain.Recherche.class.getName());
+            createCache(cm, com.techxel.buntu.domain.Acheter.class.getName());
+            createCache(cm, com.techxel.buntu.domain.Louer.class.getName());
+            createCache(cm, com.techxel.buntu.domain.Estimer.class.getName());
+            createCache(cm, com.techxel.buntu.domain.Contact.class.getName());
+            createCache(cm, com.techxel.buntu.domain.Apropos.class.getName());
+            createCache(cm, com.techxel.buntu.domain.Propriete.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

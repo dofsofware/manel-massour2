@@ -1,0 +1,15 @@
+{
+  "applications": "*",
+  "changelogDate": "20220609004507",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "apropos",
+  "fields": [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Apropos",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

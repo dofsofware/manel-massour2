@@ -1,0 +1,23 @@
+{
+  "buntuApp": {
+    "louer": {
+      "home": {
+        "title": "Louers",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Louer",
+        "createOrEditLabel": "Créer ou éditer un Louer",
+        "notFound": "Aucun Louer trouvé"
+      },
+      "created": "Un nouveau Louer a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Louer avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Louer avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Louer {{ id }} ?"
+      },
+      "detail": {
+        "title": "Louer"
+      },
+      "id": "ID"
+    }
+  }
+}

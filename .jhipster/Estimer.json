@@ -1,0 +1,15 @@
+{
+  "applications": "*",
+  "changelogDate": "20220609004505",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "estimer",
+  "fields": [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Estimer",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

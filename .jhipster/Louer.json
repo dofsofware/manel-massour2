@@ -1,0 +1,15 @@
+{
+  "applications": "*",
+  "changelogDate": "20220609004504",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "louer",
+  "fields": [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Louer",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

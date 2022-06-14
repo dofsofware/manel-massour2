@@ -1,0 +1,23 @@
+{
+  "buntuApp": {
+    "estimer": {
+      "home": {
+        "title": "Estimers",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Estimer",
+        "createOrEditLabel": "Créer ou éditer un Estimer",
+        "notFound": "Aucun Estimer trouvé"
+      },
+      "created": "Un nouveau Estimer a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Estimer avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Estimer avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Estimer {{ id }} ?"
+      },
+      "detail": {
+        "title": "Estimer"
+      },
+      "id": "ID"
+    }
+  }
+}
