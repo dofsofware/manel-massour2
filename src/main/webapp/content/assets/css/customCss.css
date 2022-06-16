@@ -563,3 +563,22 @@
 .owl-prev {
   display: none;
 }
+/* recapcha */
+.rc-anchor-container {
+  width: 100%;
+}
+.captcha {
+  position: relative;
+  width: 100%;
+  height: 80px;
+}
+.captcha_ {
+  position: absolute;
+  left: calc(75% - 304px) !important;
+}
+@media only screen and (max-width: 991px) {
+  .captcha_ {
+    position: absolute;
+    left: 0 !important;
+  }
+}

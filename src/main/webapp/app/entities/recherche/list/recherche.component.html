@@ -233,7 +233,7 @@
             </div>
           </div>
           <!-- END FILTERING LIST -->
-          <button class="btn btn-primary" id="loadMarkers" (click)="addMarkers()">tester</button>
+
           <!-- LISTING LIST -->
           <section class="zoneRecherche">
             <div class="container">
@@ -814,9 +814,16 @@
                           <textarea class="form-control required" rows="5" required="required" placeholder="Votre message"></textarea>
                         </div>
                       </div>
+                      <div class="captcha">
+                        <re-captcha
+                          class="captcha_"
+                          (resolved)="resolved($event)"
+                          siteKey="6LemOXQgAAAAAPs1mjueKJNtGhSC7xjOiMMVn9fA"
+                        ></re-captcha>
+                      </div>
                       <div class="profile__agent__footer">
                         <div class="form-group mb-0">
-                          <button class="btn btn-primary text-capitalize btn-block">
+                          <button [disabled]="recaptcha_" class="btn btn-primary text-capitalize btn-block">
                             Envoyer le message <i class="fa fa-paper-plane ml-1"></i>
                           </button>
                         </div>

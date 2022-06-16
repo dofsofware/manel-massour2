@@ -7,9 +7,10 @@ import { RechercheDeleteDialogComponent } from './delete/recherche-delete-dialog
 import { RechercheRoutingModule } from './route/recherche-routing.module';
 import { ChangerpipePipe } from 'app/changerpipe.pipe';
 import { Typedepapier } from 'app/typedepapierpipe.pipe';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
-  imports: [SharedModule, RechercheRoutingModule],
+  imports: [SharedModule, RechercheRoutingModule, RecaptchaModule],
   declarations: [
     RechercheComponent,
     RechercheDetailComponent,

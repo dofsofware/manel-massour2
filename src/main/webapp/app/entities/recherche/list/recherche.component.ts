@@ -14,10 +14,12 @@ import { IPositionElements } from 'ngx-infinite-scroll';
   selector: 'jhi-recherche',
   templateUrl: './recherche.component.html',
 })
-export class RechercheComponent implements OnInit, AfterViewInit {
+export class RechercheComponent implements OnInit, AfterViewInit, AfterViewChecked {
   proprietes?: IPropriete[];
   proprieteDetail?: IPropriete;
   isLoading = false;
+  recaptcha_ = true;
+  entrer = true;
   private map: any;
   private map2: any;
 
@@ -27,6 +29,16 @@ export class RechercheComponent implements OnInit, AfterViewInit {
     protected rechercheService: RechercheService,
     protected modalService: NgbModal
   ) {}
+  ngAfterViewChecked(): void {
+    if (this.entrer === true && $('.card__box-v1').length > 0) {
+      this.addMarkers();
+      this.entrer = false;
+    }
+
+    $('.bluebox').css({
+      width: `${$('.slider__image__detail-large-one').width()!}px`,
+    });
+  }
 
   loadAll(): void {
     this.isLoading = true;
@@ -242,7 +254,6 @@ export class RechercheComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     initJs();
-
     // Map initialization
     this.map = L.map('map', { attributionControl: true }).setView([14.656875015645937, -14.833755006747824], 7);
     const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -397,9 +408,6 @@ export class RechercheComponent implements OnInit, AfterViewInit {
           $('.grilleVersion2').removeClass('col-md-6');
           $('.grilleVersion2').addClass('col-md-4');
           initJs();
-          $('.bluebox').css({
-            width: `${$('.slider__image__detail-large-one').width()!}px`,
-          });
         } else {
           $('#carte').show(500);
           $('#resultat').removeClass('container');
@@ -407,9 +415,6 @@ export class RechercheComponent implements OnInit, AfterViewInit {
           $('.grilleVersion2').removeClass('col-md-4');
           $('.grilleVersion2').addClass('col-md-6');
           initJs();
-          $('.bluebox').css({
-            width: `${$('.slider__image__detail-large-one').width()!}px`,
-          });
         }
       });
 
@@ -429,9 +434,6 @@ export class RechercheComponent implements OnInit, AfterViewInit {
           $('.grilleVersion2').removeClass('col-md-4');
           $('.grilleVersion2').addClass('col-md-6');
           initJs();
-          $('.bluebox').css({
-            width: `${$('.slider__image__detail-large-one').width()!}px`,
-          });
         }
       });
     });
@@ -569,5 +571,8 @@ export class RechercheComponent implements OnInit, AfterViewInit {
 
   lirePlus(): void {
     $('#lire_plus').addClass('visible');
+  }
+  resolved(captchaResponse: string): void {
+    this.recaptcha_ = false;
   }
 }
