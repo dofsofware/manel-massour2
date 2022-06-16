@@ -538,18 +538,16 @@ export class RechercheComponent implements OnInit, AfterViewInit {
         icon: marker_vente,
       });
     }
+
     const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.tech-xel.com/" target="_blank">tech xel</a> contributors',
     });
 
-    if (this.map2.hasLayer(OpenStreetMap_Mapnik)) {
-      this.map2.flyTo([this.proprieteDetail.latitude!, this.proprieteDetail.longitude!], 17);
-    } else {
-      // Map2 initialization
-      this.map2 = L.map('map2', { attributionControl: true }).setView([14.656875015645937, -14.833755006747824], 7);
-      OpenStreetMap_Mapnik.addTo(this.map2);
-    }
+    // Map2 initialization
+    this.map2 = L.map('map2', { attributionControl: true }).setView([14.656875015645937, -14.833755006747824], 7);
+    OpenStreetMap_Mapnik.addTo(this.map2);
+    this.map2.flyTo([this.proprieteDetail.latitude!, this.proprieteDetail.longitude!], 17);
 
     marker.addTo(this.map2);
 
