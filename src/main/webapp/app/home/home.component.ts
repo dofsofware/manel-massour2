@@ -187,7 +187,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       level = 5;
       typing(1900);
       setTimeout(addResponseMsg, 2000, "c'est noté " + nom);
-      setTimeout(addResponseMsg, 3000, `Pour ne pas vous appelez à une heure qui vous convient pas`);
+      // setTimeout(addResponseMsg, 3000, `Pour ne pas vous appelez à une heure qui vous convient pas`);
     }
   }
 

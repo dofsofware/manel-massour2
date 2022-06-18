@@ -10,16 +10,20 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { HttpResponse } from '@angular/common/http';
 import { ProprieteDeleteDialogComponent } from 'app/entities/propriete/delete/propriete-delete-dialog.component';
 import { IPositionElements } from 'ngx-infinite-scroll';
+import { Transaction } from 'app/entities/enumerations/transaction.model';
 @Component({
   selector: 'jhi-recherche',
   templateUrl: './recherche.component.html',
 })
 export class RechercheComponent implements OnInit, AfterViewInit, AfterViewChecked {
+  proprietesInitial?: IPropriete[];
   proprietes?: IPropriete[];
   proprieteDetail?: IPropriete;
   isLoading = false;
   recaptcha_ = true;
+  nbpUrl = true;
   entrer = true;
+  map2Init = false;
   private map: any;
   private map2: any;
 
@@ -29,6 +33,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     protected rechercheService: RechercheService,
     protected modalService: NgbModal
   ) {}
+
   ngAfterViewChecked(): void {
     if (this.entrer === true && $('.card__box-v1').length > 0) {
       this.addMarkers();
@@ -38,6 +43,156 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     $('.bluebox').css({
       width: `${$('.slider__image__detail-large-one').width()!}px`,
     });
+
+    if (this.nbpUrl === true && $('.card__box-v1').length > 0) {
+      this.proprietefilter();
+      this.nbpUrl = false;
+    }
+    $('#return-to-top').css('display', 'none');
+  }
+
+  sortBy(trierPar: string): void {
+    if (trierPar === 'moinscher') {
+      this.proprietes = this.proprietes?.sort(function (a: IPropriete, b: IPropriete) {
+        return a.prix! - b.prix!;
+      });
+    } else if (trierPar === 'pluscher') {
+      this.proprietes = this.proprietes?.sort(function (a: IPropriete, b: IPropriete) {
+        return b.prix! - a.prix!;
+      });
+    } else if (trierPar === 'vendre') {
+      this.proprietes = this.proprietes?.sort(function (a: IPropriete) {
+        if (a.modeDeTransaction === 'VENDRE') {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+    } else if (trierPar === 'louer') {
+      this.proprietes = this.proprietes?.sort(function (a: IPropriete) {
+        if (a.modeDeTransaction === 'VENDRE') {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+    }
+  }
+
+  reinitialiserResultat(): void {
+    $('#search').val('');
+    this.proprietefilter();
+  }
+
+  proprietefilter(): void {
+    const motCle = String($('#search').val()).split(',');
+    if ($('#search').val() === '') {
+      this.proprietes = this.proprietesInitial;
+    } else {
+      this.proprietes = this.proprietesInitial;
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        return String(prop.adresse).toUpperCase().includes(String(motCle[0]).toUpperCase());
+      });
+    }
+    if ($('#nbpieces').val() !== 'tout') {
+      if ($('#nbpieces').val() === '10plus') {
+        this.proprietes = this.proprietes?.filter(function (prop) {
+          return prop.nombreDePieces! >= 10;
+        });
+      } else {
+        this.proprietes = this.proprietes?.filter(function (prop) {
+          return prop.nombreDePieces! === Number($('#nbpieces').val());
+        });
+      }
+    }
+    if ($('#meuble').is(':checked')) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        if (prop.meuble) {
+          return prop.meuble;
+        } else {
+          return false;
+        }
+      });
+    }
+    if ($('#eau').is(':checked')) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        if (prop.accesEau) {
+          return prop.accesEau;
+        } else {
+          return false;
+        }
+      });
+    }
+    if ($('#adsl').is(':checked')) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        if (prop.accesADSL) {
+          return prop.accesADSL;
+        } else {
+          return false;
+        }
+      });
+    }
+    if ($('#electricite').is(':checked')) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        if (prop.acceEelectricite) {
+          return prop.acceEelectricite;
+        } else {
+          return false;
+        }
+      });
+    }
+    if ($('#moratoire').is(':checked')) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        if (prop.modeDePaiement) {
+          return prop.modeDePaiement === 'MORATOIRE';
+        } else {
+          return false;
+        }
+      });
+    }
+    if ($('#comptant').is(':checked')) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        if (prop.modeDePaiement) {
+          return prop.modeDePaiement === 'COMPTANT';
+        } else {
+          return false;
+        }
+      });
+    }
+    if ($('#max').val()) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        return prop.prix! <= $('#max').val()!;
+      });
+    }
+    if ($('#min').val()) {
+      this.proprietes = this.proprietes?.filter(function (prop) {
+        return prop.prix! >= $('#min').val()!;
+      });
+    }
+
+    this.proprietes = this.proprietes?.filter(function (prop) {
+      if ($('#categories').val() === 'terrain') {
+        return prop.type! === 'TERRAIN';
+      } else if ($('#categories').val() === 'maison') {
+        return prop.type! === 'MAISON';
+      } else if ($('#categories').val() === 'appartement') {
+        return prop.type! === 'APPARTEMENT';
+      } else if ($('#categories').val() === 'chambre') {
+        return prop.type! === 'CHAMBRE';
+      } else if ($('#categories').val() === 'bureau') {
+        return prop.type! === 'BUREAU';
+      } else if ($('#categories').val() === 'commerce') {
+        return prop.type! === 'LOCAL_DE_COMMERCE';
+      } else if ($('#categories').val() === 'verger') {
+        return prop.type! === 'VERGER';
+      } else if ($('#categories').val() === 'hangar') {
+        return prop.type! === 'HANGAR';
+      }
+      return true;
+    });
+    $('.skeleton-content').delay(2000).fadeOut('slow');
+    this.entrer = true;
+    this.addMarkers();
   }
 
   loadAll(): void {
@@ -47,6 +202,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       next: (res: HttpResponse<IPropriete[]>) => {
         this.isLoading = false;
         this.proprietes = res.body ?? [];
+        this.proprietesInitial = res.body ?? [];
       },
       error: () => {
         this.isLoading = false;
@@ -223,6 +379,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         });
       }
     }
+    $('.skeleton-content').delay(2000).fadeOut('slow');
   }
 
   ngOnInit(): void {
@@ -253,7 +410,6 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   ngAfterViewInit(): void {
-    initJs();
     // Map initialization
     this.map = L.map('map', { attributionControl: true }).setView([14.656875015645937, -14.833755006747824], 7);
     const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -274,6 +430,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       'Open Street Map': OpenStreetMap_Mapnik,
       'google Sat': googleSat,
     };
+
     const options_ = {
       position: 'topleft',
     };
@@ -303,7 +460,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           .then(response => response.json())
           .then(json => $('#search').val(json.features[0].properties.display_name));
 
-        this.map.flyTo([urlCoordonnees.searchParams.get('lat'), urlCoordonnees.searchParams.get('lng')], 16);
+        this.map.flyTo([urlCoordonnees.searchParams.get('lat'), urlCoordonnees.searchParams.get('lng')], 15);
       } else {
         $('#categories').val('tout');
         const getUrl = window.location;
@@ -360,90 +517,17 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       // fin verifier si le nbp passée depuis url exist dans nbPieces sinon nbPieces = tout
     }
 
-    $(function () {
-      // let elementRechercher = document.getElementById("result");
-      const btnRechercher = document.getElementById('rechercher');
-      // let elementCategorie = document.getElementById("categories");
-
-      btnRechercher!.addEventListener('click', () => {
-        // window.location.href = encodeURI(elementRechercher!.val+"&categories="+elementCategorie.value);
-      });
-
-      $('#plusDeCriteres').on('click', function () {
-        if ($('.PlusDeCriteres_').is(':visible')) {
-          $('.PlusDeCriteres_').hide(500);
-        } else {
-          $('.PlusDeCriteres_').show(500);
-        }
-      });
-
-      $('#budget').on('click', function () {
-        if ($('#budget_min').is(':visible')) {
-          $('#budget_min').hide(500);
-        } else {
-          $('#budget_min').show(500);
-        }
-        if ($('#budget_max').is(':visible')) {
-          $('#budget_max').hide(500);
-        } else {
-          $('#budget_max').show(500);
-        }
-      });
-
-      $('#filtre').on('click', function () {
-        if ($('#filtre_').is(':visible')) {
-          $('#filtre_').slideToggle(500);
-        } else {
-          $('#filtre_').slideToggle(500);
-        }
-      });
-
-      $('.fullDetail').on('click', function () {
-        if ($('#carte').is(':visible')) {
-          $('#carte').animate({ left: '-100%' });
-          $('#carte').hide(500);
-          $('#carte').animate({ left: '0' });
-          $('#resultat').removeClass('col-lg-5');
-          $('#resultat').addClass('container');
-          $('.grilleVersion2').removeClass('col-md-6');
-          $('.grilleVersion2').addClass('col-md-4');
-          initJs();
-        } else {
-          $('#carte').show(500);
-          $('#resultat').removeClass('container');
-          $('#resultat').addClass('col-lg-5');
-          $('.grilleVersion2').removeClass('col-md-4');
-          $('.grilleVersion2').addClass('col-md-6');
-          initJs();
-        }
-      });
-
-      $('#sansCarte').on('click', function () {
-        if ($('#carte').is(':visible')) {
-          $('#carte').animate({ left: '-100%' });
-          $('#carte').hide(500);
-          $('#carte').animate({ left: '0' });
-          $('#resultat').removeClass('col-lg-5');
-          $('#resultat').addClass('container');
-          $('.grilleVersion2').removeClass('col-md-6');
-          $('.grilleVersion2').addClass('col-md-4');
-        } else {
-          $('#carte').show(500);
-          $('#resultat').removeClass('container');
-          $('#resultat').addClass('col-lg-5');
-          $('.grilleVersion2').removeClass('col-md-4');
-          $('.grilleVersion2').addClass('col-md-6');
-          initJs();
-        }
-      });
-    });
-    $('.skeleton-content').delay(3000).fadeOut('slow');
     $(window).scroll(function () {
       $(this).scrollTop()! >= 225 ? $('.bluebox').fadeIn(100) : $('.bluebox').fadeOut(1);
       $('.bluebox').css({
         width: `${$('.slider__image__detail-large-one').width()!}px`,
       });
     });
+
+    $('.auto-clear').on('click', function () {
+      $('#sansAdresse').click();
+    });
+    initJs();
   }
 
   goto(): void {
@@ -452,29 +536,26 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     const lng = $('#lat').val();
 
     if ($('#lat').val() !== '' || $('#lng').val() !== '') {
-      this.map.flyTo([$('#lng').val(), $('#lat').val()], 16);
+      this.map.flyTo([$('#lng').val(), $('#lat').val()], 15);
     }
     const urlCoordonnees = new URL(window.location.href);
     urlCoordonnees.searchParams.set('lat', String(lat));
     urlCoordonnees.searchParams.set('lng', String(lng));
     urlCoordonnees.searchParams.set('categories', String(cat));
     window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
+    this.proprietefilter();
   }
 
   // quand on choisit une categorie
   change(): void {
+    this.proprietefilter();
     // on desactive l'option nombre de pièces
     const urlCoordonnees = new URL(window.location.href);
     const cat = $('#categories').val();
     const lat = urlCoordonnees.searchParams.get('lat');
     const lng = urlCoordonnees.searchParams.get('lng');
     const nbP = urlCoordonnees.searchParams.get('nbp');
-    if (
-      $('#categories').val() === 'terrain' ||
-      $('#categories').val() === 'chambre' ||
-      $('#categories').val() === 'hangar' ||
-      $('#categories').val() === 'verger'
-    ) {
+    if (cat === 'terrain' || cat === 'chambre' || cat === 'hangar' || cat === 'verger') {
       $('#nbpieces').val('tout');
       if (nbP !== null) {
         urlCoordonnees.searchParams.delete('nbp');
@@ -512,7 +593,9 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       urlCoordonnees.searchParams.set('nbp', String($('#nbpieces').val()));
       window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
     }
+    this.proprietefilter();
   }
+
   // afficher Détails de la proprièté
   public displayDetail(propriete: IPropriete): void {
     this.proprieteDetail = undefined;
@@ -520,6 +603,10 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     $('#resultList').hide(0);
     $('#detail').show(0);
     $('html, body').animate({ scrollTop: 0 }, 'slow');
+    $('#nom').val('');
+    $('#tel').val('');
+    $('#email').val('');
+    $('#message').val('');
     this.map.flyTo([propriete.latitude, propriete.longitude], 18);
     let marker: L.Marker<any>;
     const marker_location = L.icon({
@@ -531,7 +618,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       iconUrl: 'content/assets/images/marker_vendre.png',
       iconSize: [45, 45],
     });
-    if (this.proprieteDetail.modeDeTransaction === 'LOCATION') {
+    if (this.proprieteDetail.modeDeTransaction === Transaction.LOCATION) {
       marker = L.marker([this.proprieteDetail.latitude!, this.proprieteDetail.longitude!], {
         icon: marker_location,
       });
@@ -540,19 +627,21 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         icon: marker_vente,
       });
     }
+    if (this.map2Init === false) {
+      const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.tech-xel.com/" target="_blank">tech xel</a> contributors',
+      });
 
-    const OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.tech-xel.com/" target="_blank">tech xel</a> contributors',
-    });
-
-    // Map2 initialization
-    this.map2 = L.map('map2', { attributionControl: true }).setView([14.656875015645937, -14.833755006747824], 7);
-    OpenStreetMap_Mapnik.addTo(this.map2);
-    this.map2.flyTo([this.proprieteDetail.latitude!, this.proprieteDetail.longitude!], 17);
-
+      // Map2 initialization
+      this.map2 = L.map('map2', { attributionControl: true }).setView([14.656875015645937, -14.833755006747824], 7);
+      OpenStreetMap_Mapnik.addTo(this.map2);
+      this.map2Init = true;
+    }
+    $('#map2 .leaflet-marker-icon').remove();
+    $('#map2 .leaflet-popup').remove();
+    this.map2.setView([this.proprieteDetail.latitude!, this.proprieteDetail.longitude!], 17);
     marker.addTo(this.map2);
-
     initJs();
   }
 
@@ -561,7 +650,6 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.proprieteDetail = undefined;
     $('#resultList').show(0);
     $('#detail').hide(0);
-
     this.map.setZoom(15);
     $('.bluebox').css({
       width: `${$('.slider__image__detail-large-one').width()!}px`,
@@ -572,7 +660,123 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   lirePlus(): void {
     $('#lire_plus').addClass('visible');
   }
+
   resolved(captchaResponse: string): void {
     this.recaptcha_ = false;
+  }
+
+  tester(): void {
+    alert($('#comptant').is(':checked'));
+  }
+
+  plusDecriete(): void {
+    if ($('.PlusDeCriteres_').is(':visible')) {
+      $('.PlusDeCriteres_').hide(500);
+    } else {
+      $('.PlusDeCriteres_').show(500);
+    }
+  }
+
+  budget(): void {
+    if ($('#budget_min').is(':visible')) {
+      $('#budget_min').hide(500);
+    } else {
+      $('#budget_min').show(500);
+    }
+    if ($('#budget_max').is(':visible')) {
+      $('#budget_max').hide(500);
+    } else {
+      $('#budget_max').show(500);
+    }
+  }
+
+  visibiliteCarte(): void {
+    if ($('#carte').is(':visible')) {
+      $('#carte').animate({ left: '-100%' });
+      $('#carte').hide(500);
+      $('#carte').animate({ left: '0' });
+      $('#resultat').removeClass('col-lg-5');
+      $('#resultat').addClass('container');
+      $('.grilleVersion2').removeClass('col-md-6');
+      $('.grilleVersion2').addClass('col-md-4');
+    } else {
+      $('#carte').show(500);
+      $('#resultat').removeClass('container');
+      $('#resultat').addClass('col-lg-5');
+      $('.grilleVersion2').removeClass('col-md-4');
+      $('.grilleVersion2').addClass('col-md-6');
+      initJs();
+    }
+  }
+
+  fullDetail(): void {
+    if ($('#carte').is(':visible')) {
+      $('#carte').animate({ left: '-100%' });
+      $('#carte').hide(500);
+      $('#carte').animate({ left: '0' });
+      $('#resultat').removeClass('col-lg-5');
+      $('#resultat').addClass('container');
+      $('.grilleVersion2').removeClass('col-md-6');
+      $('.grilleVersion2').addClass('col-md-4');
+      initJs();
+    } else {
+      $('#carte').show(500);
+      $('#resultat').removeClass('container');
+      $('#resultat').addClass('col-lg-5');
+      $('.grilleVersion2').removeClass('col-md-4');
+      $('.grilleVersion2').addClass('col-md-6');
+      initJs();
+    }
+  }
+
+  filtre(): void {
+    if ($('#filtre_').is(':visible')) {
+      $('#filtre_').slideToggle(500);
+    } else {
+      $('#filtre_').slideToggle(500);
+    }
+  }
+
+  message(): void {
+    if ($('#nom').val() !== '') {
+      if ($('#tel').val() !== '') {
+        if ($('#email').val() !== '') {
+          $('#message').val(`Bonjour,
+Je m’appelle ${String($('#nom').val())}, je suis intéressé(e) par  ${String(
+            this.modifierType(String(this.proprieteDetail?.type))
+          )} ayant pour référence ${String(this.proprieteDetail?.reference)}.
+Je souhaite être contacter au ${String($('#tel').val())} ou par email : ${String($('#email').val())} le plutôt possible.
+
+Bien cordialement`);
+        } else {
+          $('#message').val('');
+        }
+      } else {
+        $('#message').val('');
+      }
+    } else {
+      $('#message').val('');
+    }
+  }
+
+  modifierType(val: any): any {
+    if (val === 'MAISON') {
+      val = 'la maison';
+    } else if (val === 'APPARTEMENT') {
+      val = "l'appartement";
+    } else if (val === 'TERRAIN') {
+      val = 'le terrain';
+    } else if (val === 'VERGER') {
+      val = 'le verger';
+    } else if (val === 'HANGAR') {
+      val = "l'hangar";
+    } else if (val === 'BUREAU') {
+      val = 'le bureau';
+    } else if (val === 'CHAMBRE') {
+      val = 'la chambre';
+    } else if (val === 'LOCAL_DE_COMMERCE') {
+      val = 'le local de commerce';
+    }
+    return val;
   }
 }
