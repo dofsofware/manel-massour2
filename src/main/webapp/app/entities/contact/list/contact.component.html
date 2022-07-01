@@ -1,76 +1,268 @@
-<div>
-  <h2 id="page-heading" data-cy="ContactHeading">
-    <span jhiTranslate="buntuApp.contact.home.title">Contacts</span>
-
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="buntuApp.contact.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-contact"
-        [routerLink]="['/contact/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="buntuApp.contact.home.createLabel"> Create a new Contact </span>
-      </button>
+<!-- BREADCRUMB -->
+<div class="bg-theme-overlay">
+  <section class="section__breadcrumb">
+    <div class="container">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-8 text-center">
+          <h2 class="text-capitalize text-white">CONTACT</h2>
+        </div>
+      </div>
     </div>
-  </h2>
-
-  <jhi-alert-error></jhi-alert-error>
-
-  <jhi-alert></jhi-alert>
-
-  <div class="alert alert-warning" id="no-result" *ngIf="contacts?.length === 0">
-    <span jhiTranslate="buntuApp.contact.home.notFound">No contacts found</span>
-  </div>
-
-  <div class="table-responsive" id="entities" *ngIf="contacts && contacts.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let contact of contacts; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/contact', contact.id, 'view']">{{ contact.id }}</a>
-          </td>
-          <td class="text-end">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/contact', contact.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/contact', contact.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
-
-              <button type="submit" (click)="delete(contact)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  </section>
 </div>
+<!-- END BREADCRUMB -->
+
+<div class="clearfix"></div>
+
+<!-- Form contact -->
+<section class="wrap__contact-form">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h5>contactez nous</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group form-group-name">
+              <label>Nom* <span class="required"></span></label>
+              <input type="text" class="form-control" name="name" required="" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-group-name">
+              <label>Email* <span class="required"></span></label>
+              <input type="email" class="form-control" name="email" required="" />
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group form-group-name">
+              <label>Site web <span class="required"></span></label>
+              <input type="text" class="form-control" name="website" required="" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group form-group-name">
+              <label>Sujet* <span class="required"></span></label>
+              <input type="text" class="form-control" name="subject" required="" />
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Message* </label>
+              <textarea class="form-control" rows="9" name="message"></textarea>
+            </div>
+            <div class="form-group float-right mb-0">
+              <button type="submit" class="btn btn-primary btn-contact">Envoyer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="wrap__contact-open-hours">
+          <h5 class="text-capitalize">Nos heures de travail</h5>
+          <ul class="list-unstyled">
+            <li class="d-flex align-items-center justify-content-between"><span>Lundi - Vendredi</span> <span>09h - 17h</span></li>
+            <li class="d-flex align-items-center justify-content-between"><span>Samedi</span> <span>09h- 13h</span></li>
+            <li class="d-flex align-items-center justify-content-between"><span>Dimanche</span> <span>Fermé</span></li>
+          </ul>
+        </div>
+        <h5>Autres infos</h5>
+        <div class="wrap__contact-form-office">
+          <ul class="list-unstyled">
+            <li>
+              <span>
+                <i class="fa fa-home"></i>
+              </span>
+
+              Commune De Sébikhotane, Arrondissement De Diamniadio, Région De Dakar, Sénégal
+            </li>
+            <li>
+              <span>
+                <i class="fa fa-phone"></i>
+                <a href="tel:">(+221) 34567 890 123</a>
+              </span>
+            </li>
+            <li>
+              <span>
+                <i class="fa fa-envelope"></i>
+                <a href="mailto:">support@buntu.sn</a>
+              </span>
+            </li>
+            <li>
+              <span>
+                <i class="fa fa-globe"></i>
+                <a href="#" target="_blank"> www.buntu.sn</a>
+              </span>
+            </li>
+          </ul>
+
+          <div class="social__media">
+            <h5>Suivez nous</h5>
+            <ul class="list-inline">
+              <li class="list-inline-item">
+                <a href="#" class="btn btn-social rounded text-white facebook">
+                  <i class="fa fa-facebook"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="btn btn-social rounded text-white twitter">
+                  <i class="fa fa-twitter"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="btn btn-social rounded text-white whatsapp">
+                  <i class="fa fa-whatsapp"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="btn btn-social rounded text-white telegram">
+                  <i class="fa fa-telegram"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#" class="btn btn-social rounded text-white linkedin">
+                  <i class="fa fa-linkedin"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Form contact  -->
+
+<!-- Footer  -->
+<footer>
+  <div class="wrapper__footer bg-theme-footer">
+    <div class="container">
+      <div class="row">
+        <!-- ADDRESS -->
+        <div class="col-md-4">
+          <div class="widget__footer">
+            <figure>
+              <img src="../../../content/assets/images/logo-blue.png" alt="" class="logo-footer" />
+            </figure>
+            <p>
+              description de buntu description de buntu description de buntu description de buntu description de buntu description de buntu
+              description de buntu description de buntu description de buntu
+            </p>
+
+            <ul class="list-unstyled mb-0 mt-3">
+              <li>
+                <b> <i class="fa fa-map-marker"></i></b
+                ><span> Commune de Sébikhotane, Arrondissement de Diamniadio, Région de Dakar, Sénégal </span>
+              </li>
+              <li>
+                <b><i class="fa fa-phone-square"></i></b><span>(123) 345-6789</span>
+              </li>
+              <li>
+                <b><i class="fa fa-phone-square"></i></b><span>(+100) 123 456 7890</span>
+              </li>
+              <li>
+                <b><i class="fa fa-headphones"></i></b><span>support@buntu.sn</span>
+              </li>
+              <li>
+                <b><i class="fa fa-clock-o"></i></b><span>Lun - Sam / 9:00 - 17:00</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- END ADDRESS -->
+
+        <!-- QUICK LINKS -->
+        <div class="col-md-4">
+          <div class="widget__footer">
+            <h4 class="footer-title">Accès rapides</h4>
+            <div class="link__category-two-column">
+              <ul class="list-unstyled">
+                <li class="list-inline-item">
+                  <a href="#">Page 1</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#">Page 2</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#">Page 3</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#">Page 4</a>
+                </li>
+
+                <li class="list-inline-item">
+                  <a href="#">Page 5</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#">Page 6</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#">Page 7</a>
+                </li>
+                <li class="list-inline-item">
+                  <a href="#">Page 8</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- END QUICK LINKS -->
+
+        <!-- NEWSLETTERS -->
+        <div class="col-md-4">
+          <div class="widget__footer">
+            <h4 class="footer-title">Suivez-nous</h4>
+            <p class="mb-2">Suivez-nous et restez en contact pour recevoir les dernières nouvelles</p>
+            <p>
+              <button class="btn btn-social btn-social-o facebook mr-1">
+                <i class="fa fa-facebook-f"></i>
+              </button>
+              <button class="btn btn-social btn-social-o twitter mr-1">
+                <i class="fa fa-twitter"></i>
+              </button>
+
+              <button class="btn btn-social btn-social-o linkedin mr-1">
+                <i class="fa fa-linkedin"></i>
+              </button>
+              <button class="btn btn-social btn-social-o instagram mr-1">
+                <i class="fa fa-instagram"></i>
+              </button>
+
+              <button class="btn btn-social btn-social-o youtube mr-1">
+                <i class="fa fa-youtube"></i>
+              </button>
+            </p>
+            <br />
+            <h4 class="footer-title">newsletter</h4>
+            <!-- Form Newsletter -->
+            <div class="widget__form-newsletter">
+              <p>Ne manquez pas de vous abonner à nos flux d'actualités, veuillez remplir le formulaire ci-dessous</p>
+              <div class="mt-3">
+                <input type="text" class="form-control mb-2" placeholder="Adresse mail" />
+
+                <button class="btn btn-primary btn-block text-capitalize" type="button">S'incrire</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END NEWSLETTER -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="bg__footer-bottom-v1">
+    <div class="container">
+      <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-6">
+          <span>
+            © 2022 BUNTU real estate by
+            <a href="https://www.tech-xel.com/" target="_blank">tech xel</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- End Footer  -->

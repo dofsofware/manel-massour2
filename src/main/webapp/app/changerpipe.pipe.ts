@@ -18,7 +18,7 @@ export class ChangerpipePipe implements PipeTransform {
     } else if (value === 'HANGAR') {
       return 'Hangar';
     } else if (value === 'LOCAL_DE_COMMERCE') {
-      return 'Local de commerce';
+      return 'local commercial';
     } else if (value === 'BUREAU') {
       return 'Bureau';
     } else if (value === 'LOCATION') {

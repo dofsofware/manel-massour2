@@ -11,6 +11,8 @@ import { HttpResponse } from '@angular/common/http';
 import { ProprieteDeleteDialogComponent } from 'app/entities/propriete/delete/propriete-delete-dialog.component';
 import { IPositionElements } from 'ngx-infinite-scroll';
 import { Transaction } from 'app/entities/enumerations/transaction.model';
+import { DetailPropriete } from 'app/entities/detail-propriete/detail-propriete.model';
+import { TypeDeBien } from 'app/entities/enumerations/type-de-bien.model';
 @Component({
   selector: 'jhi-recherche',
   templateUrl: './recherche.component.html',
@@ -60,22 +62,6 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.proprietes = this.proprietes?.sort(function (a: IPropriete, b: IPropriete) {
         return b.prix! - a.prix!;
       });
-    } else if (trierPar === 'vendre') {
-      this.proprietes = this.proprietes?.sort(function (a: IPropriete) {
-        if (a.modeDeTransaction === 'VENDRE') {
-          return -1;
-        } else {
-          return 1;
-        }
-      });
-    } else if (trierPar === 'louer') {
-      this.proprietes = this.proprietes?.sort(function (a: IPropriete) {
-        if (a.modeDeTransaction === 'VENDRE') {
-          return 1;
-        } else {
-          return -1;
-        }
-      });
     }
   }
 
@@ -86,6 +72,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   proprietefilter(): void {
     const motCle = String($('#search').val()).split(',');
+
     if ($('#search').val() === '') {
       this.proprietes = this.proprietesInitial;
     } else {
@@ -94,6 +81,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         return String(prop.adresse).toUpperCase().includes(String(motCle[0]).toUpperCase());
       });
     }
+
     if ($('#nbpieces').val() !== 'tout') {
       if ($('#nbpieces').val() === '10plus') {
         this.proprietes = this.proprietes?.filter(function (prop) {
@@ -105,7 +93,14 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         });
       }
     }
+
+    const urlCoordonnees = new URL(window.location.href);
     if ($('#meuble').is(':checked')) {
+      const mbl = urlCoordonnees.searchParams.get('mbl');
+      if (mbl === null) {
+        urlCoordonnees.searchParams.append('mbl', 'true');
+      }
+
       this.proprietes = this.proprietes?.filter(function (prop) {
         if (prop.meuble) {
           return prop.meuble;
@@ -113,8 +108,15 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           return false;
         }
       });
+    } else {
+      urlCoordonnees.searchParams.delete('mbl');
     }
+
     if ($('#eau').is(':checked')) {
+      const eau = urlCoordonnees.searchParams.get('eau');
+      if (eau === null) {
+        urlCoordonnees.searchParams.append('eau', 'true');
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         if (prop.accesEau) {
           return prop.accesEau;
@@ -122,8 +124,15 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           return false;
         }
       });
+    } else {
+      urlCoordonnees.searchParams.delete('eau');
     }
+
     if ($('#adsl').is(':checked')) {
+      const adsl = urlCoordonnees.searchParams.get('adsl');
+      if (adsl === null) {
+        urlCoordonnees.searchParams.append('adsl', 'true');
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         if (prop.accesADSL) {
           return prop.accesADSL;
@@ -131,8 +140,15 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           return false;
         }
       });
+    } else {
+      urlCoordonnees.searchParams.delete('adsl');
     }
+
     if ($('#electricite').is(':checked')) {
+      const elect = urlCoordonnees.searchParams.get('elect');
+      if (elect === null) {
+        urlCoordonnees.searchParams.append('elect', 'true');
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         if (prop.acceEelectricite) {
           return prop.acceEelectricite;
@@ -140,8 +156,16 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           return false;
         }
       });
+    } else {
+      urlCoordonnees.searchParams.delete('elect');
     }
+
     if ($('#moratoire').is(':checked')) {
+      urlCoordonnees.searchParams.delete('compt');
+      const mora = urlCoordonnees.searchParams.get('mora');
+      if (mora === null) {
+        urlCoordonnees.searchParams.append('mora', 'true');
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         if (prop.modeDePaiement) {
           return prop.modeDePaiement === 'MORATOIRE';
@@ -149,8 +173,16 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           return false;
         }
       });
+    } else {
+      urlCoordonnees.searchParams.delete('mora');
     }
+
     if ($('#comptant').is(':checked')) {
+      urlCoordonnees.searchParams.delete('mora');
+      const compt = urlCoordonnees.searchParams.get('compt');
+      if (compt === null) {
+        urlCoordonnees.searchParams.append('compt', 'true');
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         if (prop.modeDePaiement) {
           return prop.modeDePaiement === 'COMPTANT';
@@ -158,17 +190,58 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           return false;
         }
       });
+    } else {
+      urlCoordonnees.searchParams.delete('compt');
     }
+
     if ($('#max').val()) {
+      const max = urlCoordonnees.searchParams.get('max');
+      if (max === null) {
+        urlCoordonnees.searchParams.append('max', String($('#max').val()));
+      } else {
+        if ($.isNumeric(max)) {
+          urlCoordonnees.searchParams.set('max', String($('#max').val()));
+        } else {
+          urlCoordonnees.searchParams.delete('max');
+        }
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         return prop.prix! <= $('#max').val()!;
       });
+    } else {
+      urlCoordonnees.searchParams.delete('max');
     }
+
     if ($('#min').val()) {
+      const min = urlCoordonnees.searchParams.get('min');
+      if (min === null) {
+        urlCoordonnees.searchParams.append('min', String($('#min').val()));
+      } else {
+        if ($.isNumeric(min)) {
+          urlCoordonnees.searchParams.set('min', String($('#min').val()));
+        } else {
+          urlCoordonnees.searchParams.delete('min');
+        }
+      }
       this.proprietes = this.proprietes?.filter(function (prop) {
         return prop.prix! >= $('#min').val()!;
       });
+    } else {
+      urlCoordonnees.searchParams.delete('min');
     }
+
+    const transac = urlCoordonnees.searchParams.get('transac');
+    this.proprietes = this.proprietes?.filter(function (prop) {
+      if (transac === 'louer') {
+        return prop.modeDeTransaction === Transaction.LOCATION;
+      } else if (transac === 'vendre') {
+        return prop.modeDeTransaction === Transaction.VENDRE;
+      } else {
+        return true;
+      }
+    });
+
+    window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
 
     this.proprietes = this.proprietes?.filter(function (prop) {
       if ($('#categories').val() === 'terrain') {
@@ -210,6 +283,60 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     });
   }
 
+  compteur(value: string): number {
+    let tout = 0;
+    let maison = 0;
+    let appart = 0;
+    let bureau = 0;
+    let terrain = 0;
+    let chambre = 0;
+    let localDecommerce = 0;
+    let verger = 0;
+    let hangar = 0;
+    this.proprietesInitial!.forEach(propriete => {
+      tout++;
+      if (propriete.type === TypeDeBien.MAISON) {
+        maison++;
+      } else if (propriete.type === TypeDeBien.APPARTEMENT) {
+        appart++;
+      } else if (propriete.type === TypeDeBien.BUREAU) {
+        bureau++;
+      } else if (propriete.type === TypeDeBien.VERGER) {
+        verger++;
+      } else if (propriete.type === TypeDeBien.HANGAR) {
+        hangar++;
+      } else if (propriete.type === TypeDeBien.LOCAL_DE_COMMERCE) {
+        localDecommerce++;
+      } else if (propriete.type === TypeDeBien.CHAMBRE) {
+        chambre++;
+      } else {
+        terrain++;
+      }
+    });
+    if (value === 'MAISON') {
+      return maison;
+    }
+    if (value === 'tout') {
+      return tout;
+    } else if (value === 'APPARTEMENT') {
+      return appart;
+    } else if (value === 'TERRAIN') {
+      return terrain;
+    } else if (value === 'CHAMBRE') {
+      return chambre;
+    } else if (value === 'VERGER') {
+      return verger;
+    } else if (value === 'HANGAR') {
+      return hangar;
+    } else if (value === 'LOCAL_DE_COMMERCE') {
+      return localDecommerce;
+    } else if (value === 'BUREAU') {
+      return bureau;
+    } else {
+      return 0;
+    }
+  }
+
   reecriturePapier(value: string): string {
     if (value === 'MAISON') {
       return 'Maison';
@@ -224,7 +351,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     } else if (value === 'HANGAR') {
       return 'Hangar';
     } else if (value === 'LOCAL_DE_COMMERCE') {
-      return 'Local de commerce';
+      return 'local commercial';
     } else if (value === 'BUREAU') {
       return 'Bureau';
     } else if (value === 'LOCATION') {
@@ -379,10 +506,25 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         });
       }
     }
-    $('.skeleton-content').delay(2000).fadeOut('slow');
+    $('.skeleton-content').delay(1500).fadeOut('slow');
   }
 
   ngOnInit(): void {
+    const urlCoordonnees = new URL(window.location.href);
+    const carte = urlCoordonnees.searchParams.get('carte');
+    if (carte) {
+      if (carte === 'false') {
+        this.fullDetail();
+      }
+    }
+    const ref = urlCoordonnees.searchParams.get('ref');
+    if (ref) {
+      this.proprietesInitial?.forEach(propr => {
+        if (propr.reference === ref) {
+          this.displayDetail(propr);
+        }
+      });
+    }
     this.loadAll();
   }
 
@@ -454,21 +596,22 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       // verifier la longitude et la latitude passées depuis url exist dans categories sinon categories = tout
       const lat = urlCoordonnees.searchParams.get('lat');
       const lng = urlCoordonnees.searchParams.get('lng');
-      if ($.isNumeric(lat) && $.isNumeric(lng)) {
-        const api = `https://nominatim.openstreetmap.org/reverse?format=geojson&lat=${lat!}&lon=${lng!}`;
-        fetch(api)
-          .then(response => response.json())
-          .then(json => $('#search').val(json.features[0].properties.display_name));
+      if (lat !== '14.656875015645937' && lng !== '-14.833755006747824') {
+        if ($.isNumeric(lat) && $.isNumeric(lng)) {
+          const api = `https://nominatim.openstreetmap.org/reverse?format=geojson&lat=${lat!}&lon=${lng!}`;
+          fetch(api)
+            .then(response => response.json())
+            .then(json => $('#search').val(json.features[0].properties.display_name));
 
-        this.map.flyTo([urlCoordonnees.searchParams.get('lat'), urlCoordonnees.searchParams.get('lng')], 15);
-      } else {
-        $('#categories').val('tout');
-        const getUrl = window.location;
-        const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
-        const monurl = baseUrl + 'recherche';
-        window.location.href = monurl;
+          this.map.flyTo([urlCoordonnees.searchParams.get('lat'), urlCoordonnees.searchParams.get('lng')], 15);
+        } else {
+          $('#categories').val('tout');
+          const getUrl = window.location;
+          const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+          const monurl = baseUrl + 'recherche';
+          window.location.href = monurl;
+        }
       }
-
       const cat = urlCoordonnees.searchParams.get('categories');
       if (cat) {
         // verifier si la categorie passée depuis url exist dans categories sinon categories = tout
@@ -500,7 +643,11 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         // fin on verifier si la categorie possede des pieces ou pas et traite
       }
     } else {
-      window.history.pushState('object or string', 'Recherches', 'recherche');
+      urlCoordonnees.searchParams.append('lat', '14.656875015645937');
+      urlCoordonnees.searchParams.append('lng', '-14.833755006747824');
+      this.map.flyTo([14.656875015645937, -14.833755006747824], 7);
+      // window.history.pushState('object or string', 'Recherches', 'recherche');
+      window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
     }
 
     const nbP = urlCoordonnees.searchParams.get('nbp');
@@ -515,6 +662,70 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         window.history.pushState('object or string', 'Recherches', String(newurlCoordonnees));
       }
       // fin verifier si le nbp passée depuis url exist dans nbPieces sinon nbPieces = tout
+    }
+
+    const mbl = urlCoordonnees.searchParams.get('mbl');
+    if (mbl === 'true') {
+      $('#meuble').prop('checked', true);
+    }
+    const eau = urlCoordonnees.searchParams.get('eau');
+    if (eau) {
+      $('#eau').prop('checked', true);
+    }
+    const elect = urlCoordonnees.searchParams.get('elect');
+    if (elect === 'true') {
+      $('#electricite').prop('checked', true);
+    }
+    const adsl = urlCoordonnees.searchParams.get('adsl');
+    if (adsl === 'true') {
+      $('#adsl').prop('checked', true);
+    }
+    const mora = urlCoordonnees.searchParams.get('mora');
+    if (mora === 'true') {
+      $('#moratoire').prop('checked', true);
+    }
+    const compt = urlCoordonnees.searchParams.get('compt');
+    if (compt === 'true') {
+      $('#comptant').prop('checked', true);
+    }
+
+    const carte = urlCoordonnees.searchParams.get('carte');
+    if (carte) {
+      if (carte === 'false') {
+        this.fullDetail();
+      }
+    }
+    const transac = urlCoordonnees.searchParams.get('transac');
+    if (transac) {
+      if (transac === 'vendre') {
+        this.transaction(transac);
+      } else if (transac === 'louer') {
+        this.transaction(transac);
+      } else {
+        this.transaction('tout');
+      }
+    }
+
+    const ref = urlCoordonnees.searchParams.get('ref');
+    if (ref) {
+      this.proprietesInitial?.forEach(propr => {
+        if (propr.reference === ref) {
+          this.displayDetail(propr);
+        }
+      });
+    }
+
+    const max = urlCoordonnees.searchParams.get('max');
+    if (max) {
+      if ($.isNumeric(max)) {
+        $('#max').val(max);
+      }
+    }
+    const min = urlCoordonnees.searchParams.get('min');
+    if (min) {
+      if ($.isNumeric(min)) {
+        $('#min').val(min);
+      }
     }
 
     $(window).scroll(function () {
@@ -600,6 +811,12 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   public displayDetail(propriete: IPropriete): void {
     this.proprieteDetail = undefined;
     this.proprieteDetail = propriete;
+    const urlCoordonnees = new URL(window.location.href);
+    const ref = urlCoordonnees.searchParams.get('ref');
+    if (!ref) {
+      urlCoordonnees.searchParams.append('ref', this.proprieteDetail.reference!);
+    }
+    window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
     $('#resultList').hide(0);
     $('#detail').show(0);
     $('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -647,6 +864,9 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   // afficher Détails de la proprièté
   retourner(): void {
+    const urlCoordonnees = new URL(window.location.href);
+    urlCoordonnees.searchParams.delete('ref');
+    window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
     this.proprieteDetail = undefined;
     $('#resultList').show(0);
     $('#detail').hide(0);
@@ -666,7 +886,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   tester(): void {
-    alert($('#comptant').is(':checked'));
+    $('#meuble').prop('checked', true);
   }
 
   plusDecriete(): void {
@@ -691,28 +911,40 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   visibiliteCarte(): void {
+    const urlCoordonnees = new URL(window.location.href);
     if ($('#carte').is(':visible')) {
+      const carte = urlCoordonnees.searchParams.get('carte');
+      if (!carte) {
+        urlCoordonnees.searchParams.append('carte', 'false');
+      }
       $('#carte').animate({ left: '-100%' });
-      $('#carte').hide(500);
+      $('#carte').hide(0);
       $('#carte').animate({ left: '0' });
       $('#resultat').removeClass('col-lg-5');
       $('#resultat').addClass('container');
       $('.grilleVersion2').removeClass('col-md-6');
       $('.grilleVersion2').addClass('col-md-4');
     } else {
-      $('#carte').show(500);
+      urlCoordonnees.searchParams.delete('carte');
+      $('#carte').show(0);
       $('#resultat').removeClass('container');
       $('#resultat').addClass('col-lg-5');
       $('.grilleVersion2').removeClass('col-md-4');
       $('.grilleVersion2').addClass('col-md-6');
       initJs();
     }
+    window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
   }
 
   fullDetail(): void {
+    const urlCoordonnees = new URL(window.location.href);
     if ($('#carte').is(':visible')) {
+      const carte = urlCoordonnees.searchParams.get('carte');
+      if (!carte) {
+        urlCoordonnees.searchParams.append('carte', 'false');
+      }
       $('#carte').animate({ left: '-100%' });
-      $('#carte').hide(500);
+      $('#carte').hide(0);
       $('#carte').animate({ left: '0' });
       $('#resultat').removeClass('col-lg-5');
       $('#resultat').addClass('container');
@@ -720,13 +952,41 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.grilleVersion2').addClass('col-md-4');
       initJs();
     } else {
-      $('#carte').show(500);
+      urlCoordonnees.searchParams.delete('carte');
+      $('#carte').show(0);
       $('#resultat').removeClass('container');
       $('#resultat').addClass('col-lg-5');
       $('.grilleVersion2').removeClass('col-md-4');
       $('.grilleVersion2').addClass('col-md-6');
       initJs();
     }
+    window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
+  }
+
+  transaction(val: string): void {
+    const urlCoordonnees = new URL(window.location.href);
+    const transac = urlCoordonnees.searchParams.get('transac');
+    if (!transac) {
+      urlCoordonnees.searchParams.append('transac', val);
+    } else {
+      urlCoordonnees.searchParams.set('transac', val);
+    }
+    if (transac === 'vendre') {
+      $('#transacTout').removeClass('active');
+      $('#transacVendre').addClass('active');
+      $('#transacLouer').removeClass('active');
+    } else if (transac === 'louer') {
+      $('#transacTout').removeClass('active');
+      $('#transacVendre').removeClass('active');
+      $('#transacLouer').addClass('active');
+    } else {
+      $('#transacTout').addClass('active');
+      $('#transacVendre').removeClass('active');
+      $('#transacLouer').removeClass('active');
+    }
+
+    window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
+    this.proprietefilter();
   }
 
   filtre(): void {
@@ -775,7 +1035,7 @@ Bien cordialement`);
     } else if (val === 'CHAMBRE') {
       val = 'la chambre';
     } else if (val === 'LOCAL_DE_COMMERCE') {
-      val = 'le local de commerce';
+      val = 'le local commercial';
     }
     return val;
   }

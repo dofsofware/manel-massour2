@@ -61,7 +61,7 @@
                 routerLink="contact"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
+                (click)="contact()"
               >
                 <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
                 <span jhiTranslate="global.menu.entities.contact">Contact</span>
@@ -333,14 +333,17 @@
                   <li><a class="dropdown-item" href="#"> Hangar </a></li>
                 </ul>
               </li>
-              <li class="nav-item"><a class="nav-link" href="/contact.html"> Estimer votre projet </a></li>
-              <li class="nav-item"><a class="nav-link" href="/contact.html"> A propos </a></li>
+              <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="recherche()"> Rechercher </a></li>
+              <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="estimer()"> Estimer votre projet </a></li>
+              <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="apropos()"> A propos </a></li>
             </ul>
 
             <!-- Search bar.// -->
             <ul class="navbar-nav">
               <li>
-                <a href="#" class="btn btn-primary text-capitalize"> <i class="fa fa-envelope mr-1"></i> Contact</a>
+                <a (click)="contact()" style="color: #fff" class="btn btn-primary text-capitalize">
+                  <i class="fa fa-envelope mr-1"></i> Contact</a
+                >
               </li>
             </ul>
             <!-- Search content bar.// -->
@@ -395,6 +398,7 @@
                             <div class="col-sm-12 col-md-5">
                               <input
                                 autocomplete="off"
+                                role="presentation"
                                 type="text"
                                 id="search"
                                 class="auto-search-wrapper form-control"
@@ -474,14 +478,17 @@
                 <li><a class="dropdown-item" href="#"> Hangar </a></li>
               </ul>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/contact.html"> Estimer votre projet </a></li>
-            <li class="nav-item"><a class="nav-link" href="/contact.html"> A propos </a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="recherche()"> Rechercher </a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="estimer()"> Estimer votre projet </a></li>
+            <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="apropos()"> A propos </a></li>
           </ul>
 
           <!-- Search bar.// -->
           <ul class="navbar-nav">
             <li>
-              <a href="#" class="btn btn-primary text-capitalize"> <i class="fa fa-envelope mr-1"></i> Contact</a>
+              <a (click)="contact()" style="color: #fff" class="btn btn-primary text-capitalize">
+                <i class="fa fa-envelope mr-1"></i> Contact</a
+              >
             </li>
           </ul>
           <!-- Search content bar.// -->

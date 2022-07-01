@@ -582,3 +582,29 @@
     left: 0 !important;
   }
 }
+
+.custumOption:active,
+.custumOption:hover,
+.custumOption:focus,
+.custumOption:checked {
+  background-color: #26990f !important;
+}
+
+.alertRecherche {
+  background-color: #e1fcdb !important;
+  font-size: medium;
+  color: rgb(53, 53, 53);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.pillTransaction {
+  background-color: #f7fdf6;
+  border-right: #dcdcdc solid 1px;
+  text-align: center;
+}
+
+.transac {
+  width: 34%;
+  text-align: center;
+}

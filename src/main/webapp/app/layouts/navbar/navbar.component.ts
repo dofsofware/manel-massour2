@@ -79,6 +79,38 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     }
   }
 
+  contact(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + 'contact';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  apropos(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + 'apropos';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  recherche(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + 'recherche';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  estimer(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + 'estimer';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
   logout(): void {
     this.collapseNavbar();
     this.loginService.logout();

@@ -29,9 +29,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     let nom = '';
     let tel = '';
     let email = '';
+    let souhaiteFaire = '';
+    let categorie = '';
+    let budgetmax = '';
+    let budgetmin = '';
+    let accesEau_ = false;
+    let accesElect_ = false;
+    let accesADSL_ = false;
     $('#envoyerRep').on('click', function () {
       send();
     });
+
     function send(): void {
       if (running === true) {
         return;
@@ -46,12 +54,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       if (level === 1) {
         if (String(msg).toUpperCase() === 'OUI') {
           lastText = 'OUI';
-          compagnieOui();
+          connaissanceOui();
         } else if (String(msg).toUpperCase() === 'NON') {
           lastText = 'NON';
-          compagnieNon();
+          connaissanceNon();
         } else {
-          setTimeout(addResponseMsg, 1500, `Vous êtes prier de répondre pas OUI ou NON SVP`);
+          setTimeout(addResponseMsg, 1500, `Vous êtes prier de répondre par OUI ou NON SVP`);
         }
       } else if (level === 2) {
         nom = String(msg);
@@ -62,8 +70,36 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       } else if (level === 4) {
         email = String(msg);
         clientEmail();
+      } else if (level === 5) {
+        if (String(msg).toUpperCase() === 'ACHETER') {
+          lastText = 'ACHETER';
+          acheter();
+        } else if (String(msg).toUpperCase() === 'LOUER') {
+          lastText = 'LOUER';
+          louer();
+        } else if (String(msg).toUpperCase() === 'EXPOSER UN BIEN') {
+          lastText = 'EXPOSER UN BIEN';
+          exposer();
+        } else {
+          setTimeout(addResponseMsg, 1500, `Vous êtes prier de répondre par ACHETER, LOUER ou EXPOSER UN BIEN SVP`);
+        }
+      } else if (level === 6) {
+        if (String(msg).toUpperCase() !== '') {
+          setTimeout(addResponseMsg, 1500, `Merci de selectionner une catégorie et de cliquer valider SVP`);
+        }
+      } else if (level === 8) {
+        if (msg && msg !== '') {
+          budgetmin = String(msg);
+          saisieMax();
+        }
+      } else if (level === 9) {
+        if (msg && msg !== '') {
+          budgetmax = String(msg);
+          accessEau();
+        }
       }
     }
+
     function addMsg(msg: any): void {
       const div = document.createElement('div');
       div.innerHTML = "<span style='flex-grow:1'></span><div class='chat-message-sent'>" + String(msg) + '</div>';
@@ -73,6 +109,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       $('#message').val('');
       $('#message-box').scrollTop(9999999);
     }
+
     function addResponseMsg(msg: any): void {
       // .includes("text-typing")
       const div = document.createElement('div');
@@ -113,12 +150,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (level === 0) {
           typing(900);
-          setTimeout(addResponseMsg, 1000, 'Bonjour, bienvenue dans Buntu real estate. puis-je vous tenir compagnie ?');
+          setTimeout(addResponseMsg, 1000, 'Bonjour, bienvenue dans Buntu real estate. Avons nous déjà fait connaissance ?');
           setTimeout(
             addResponseMsg,
             1500,
-            `<button type="button" class="btn btn-success" id="compagnieOui" (click)="compagnieOui()">Oui</button> 
-          <button type="button" class="btn btn-danger" id="compagnieNon">Non</button>`
+            `<button type="button" class="btn btn-success" id="connaissanceNon">Non</button> 
+          <button type="button" class="btn btn-success" id="connaissanceOui">Oui</button>`
           );
           level = 1;
         }
@@ -130,35 +167,381 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    $('#message-box').on('click', '#compagnieOui', function () {
-      compagnieOui();
+    $('#message-box').on('click', '#connaissanceNon', function () {
+      connaissanceNon();
     });
-    $('#message-box').on('click', '#compagnieNon', function () {
-      compagnieNon();
+    $('#message-box').on('click', '#connaissanceOui', function () {
+      connaissanceOui();
+    });
+    $('#message-box').on('click', '#acheter', function () {
+      souhaiteFaire = 'vendre';
+      acheter();
+    });
+    $('#message-box').on('click', '#exposer', function () {
+      souhaiteFaire = 'exposer';
+      exposer();
+    });
+    $('#message-box').on('click', '#louer', function () {
+      souhaiteFaire = 'louer';
+      louer();
+    });
+    $('#message-box').on('click', '#validerCategorie', function () {
+      if (level === 6) {
+        level = 7;
+        if ($('#tout').is(':checked')) {
+          categorie = 'tout';
+          addMsg('Toutes catégories');
+        } else if ($('#terrain').is(':checked')) {
+          categorie = 'terrain';
+          addMsg('Terrain');
+        } else if ($('#maison').is(':checked')) {
+          categorie = 'maison';
+          addMsg('Maison');
+        } else if ($('#chambre').is(':checked')) {
+          categorie = 'chambre';
+          addMsg('Chambre');
+        } else if ($('#bureau').is(':checked')) {
+          categorie = 'bureau';
+          addMsg('Bureau');
+        } else if ($('#appartement').is(':checked')) {
+          categorie = 'appartement';
+          addMsg('Appartement');
+        } else if ($('#commerce').is(':checked')) {
+          categorie = 'commerce';
+          addMsg('Local commercial');
+        } else if ($('#verger').is(':checked')) {
+          categorie = 'verger';
+          addMsg('Verger');
+        } else if ($('#hangar').is(':checked')) {
+          categorie = 'hangar';
+          addMsg('Hangar');
+        }
+        definirFouchette();
+      }
+    });
+    $('#message-box').on('click', '#budgetNon', function () {
+      if (level !== 10) {
+        level = 9;
+        addMsg('Non');
+        accessEau();
+      }
+    });
+    $('#message-box').on('click', '#budgetOui', function () {
+      if (level === 7) {
+        level = 8;
+        if (lastText !== 'OUI') {
+          addMsg('Oui');
+        }
+        saisieMin();
+      }
+    });
+    $('#message-box').on('click', '#accesEauNon', function () {
+      if (level !== 12) {
+        level = 11;
+        addMsg('Non');
+        accessElect();
+      }
+    });
+    $('#message-box').on('click', '#accessEauOui', function () {
+      if (level === 10) {
+        level = 11;
+        if (lastText !== 'OUI') {
+          addMsg('Oui');
+        }
+        accesEau_ = true;
+        accessElect();
+      }
+    });
+    $('#message-box').on('click', '#accesElectNon', function () {
+      if (level === 12) {
+        level = 13;
+        addMsg('Non');
+        accessAdsl();
+      }
+    });
+    $('#message-box').on('click', '#accessElectOui', function () {
+      if (level === 12) {
+        level = 13;
+        if (lastText !== 'OUI') {
+          addMsg('Oui');
+        }
+        accesElect_ = true;
+        accessAdsl();
+      }
+    });
+    $('#message-box').on('click', '#accesADSLNon', function () {
+      if (level === 14) {
+        level = 15;
+        addMsg('Non');
+        generateUrl();
+      }
+    });
+    $('#message-box').on('click', '#accessADSLOui', function () {
+      if (level === 14) {
+        level = 15;
+        if (lastText !== 'OUI') {
+          addMsg('Oui');
+        }
+        accesADSL_ = true;
+        generateUrl();
+      }
     });
 
-    function compagnieNon(): void {
-      if (level === 1) {
-        level = 0;
-        if (lastText !== 'NON') {
-          addMsg('Non');
-        }
-        typing(1900);
-        setTimeout(addResponseMsg, 2000, 'Merci beaucoup !!! Au revoir');
+    function generateUrl(): void {
+      const getUrl = window.location;
+      const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+      let monurl = baseUrl + 'recherche';
+      monurl = monurl.concat(`?categories=${categorie}`);
+      if (budgetmax) {
+        monurl = monurl.concat(`&max=${budgetmax}`);
+      }
+      if (budgetmin) {
+        monurl = monurl.concat(`&min=${budgetmin}`);
+      }
+      if (accesEau_ === true) {
+        monurl = monurl.concat(`&eau=${String(accesEau_)}`);
+      }
+      if (accesElect_ === true) {
+        monurl = monurl.concat(`&elect=${String(accesElect_)}`);
+      }
+      if (accesADSL_ === true) {
+        monurl = monurl.concat(`&adsl=${String(accesADSL_)}`);
+      }
+      if (souhaiteFaire === 'vendre' || souhaiteFaire === 'louer') {
+        monurl = monurl.concat(`&transac=${String(souhaiteFaire)}`);
+      }
+      // window.location.href = monurl;
+      setTimeout(addResponseMsg, 1000, `Vous pourrez peaufiner votre recherche en <a href="${monurl}">cliquant ici</a>`);
+      // addResponseMsg(`
+      // fin
+      // souhaiteFaire = ${souhaiteFaire}<br>
+      // categorie = ${categorie}<br>
+      // budgetmax = ${budgetmax}<br>
+      // budgetmin = ${budgetmin}<br>
+      // accesEau_ = ${String(accesEau_)}<br>
+      // accesElect_ = ${String(accesElect_)}<br>
+      // accesADSL_ = ${String(accesADSL_)}<br>
+      // `);
+    }
+
+    function accessEau(): void {
+      if (level === 9) {
+        level = 10;
+        typing(900);
+        setTimeout(addResponseMsg, 1000, "Souhaitez vous voir que les Biens ayant un accèss à l'eau ?");
+        setTimeout(
+          addResponseMsg,
+          1500,
+          `<button type="button" class="btn btn-success" id="accesEauNon">Non</button> 
+          <button type="button" class="btn btn-success" id="accessEauOui">Oui</button>`
+        );
       }
     }
 
-    function compagnieOui(): void {
+    function accessElect(): void {
+      if (level === 11) {
+        level = 12;
+        typing(900);
+        setTimeout(addResponseMsg, 1000, "Souhaitez vous voir que les Biens ayant un accèss à l'électricité ?");
+        setTimeout(
+          addResponseMsg,
+          1500,
+          `<button type="button" class="btn btn-success" id="accesElectNon">Non</button> 
+          <button type="button" class="btn btn-success" id="accessElectOui">Oui</button>`
+        );
+      }
+    }
+
+    function accessAdsl(): void {
+      if (level === 13) {
+        level = 14;
+        typing(900);
+        setTimeout(addResponseMsg, 1000, "Souhaitez vous voir que les Biens ayant un accèss à l'ADSL ?");
+        setTimeout(
+          addResponseMsg,
+          1500,
+          `<button type="button" class="btn btn-success" id="accesADSLNon">Non</button> 
+          <button type="button" class="btn btn-success" id="accessADSLOui">Oui</button>`
+        );
+      }
+    }
+
+    function saisieMin(): void {
+      typing(900);
+      setTimeout(addResponseMsg, 1000, 'Merci de saisir le prix minimum recherché');
+    }
+
+    function saisieMax(): void {
+      level = 9;
+      typing(900);
+      setTimeout(addResponseMsg, 1000, 'Merci de saisir le prix maximum recherché');
+    }
+
+    function louer(): void {
+      if (level === 5) {
+        level = 6;
+        if (lastText !== 'LOUER') {
+          addMsg('Louer');
+        }
+        choisirCategorieLouer();
+      }
+    }
+
+    function definirFouchette(): void {
+      typing(900);
+      setTimeout(addResponseMsg, 1000, 'Voulez vous définir une fourchette pour le prix ?');
+      setTimeout(
+        addResponseMsg,
+        1500,
+        `<button type="button" class="btn btn-success" id="budgetNon">Non</button> 
+          <button type="button" class="btn btn-success" id="budgetOui">Oui</button>`
+      );
+    }
+
+    function acheter(): void {
+      if (level === 5) {
+        level = 6;
+        if (lastText !== 'ACHETER') {
+          addMsg('Acheter');
+        }
+        choisirCategorieAchat();
+      }
+    }
+
+    function choisirCategorieAchat(): void {
+      typing(900);
+      setTimeout(addResponseMsg, 1000, 'Que souhaitez vous acheter ?');
+      setTimeout(
+        addResponseMsg,
+        1500,
+        `<div class="form-group categorie">
+            <label class="custom-control custom-radio">
+                <input name='cat' id='tout'  class="custom-control-input" checked="" type="radio" value="tout">
+                <span class="custom-control-label"> Toutes catégories </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='terrain' class="custom-control-input" type="radio" value="terrain">
+                <span class="custom-control-label"> Terrain </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='maison' class="custom-control-input" type="radio" value="maison">
+                <span class="custom-control-label"> Maison </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='appartement' class="custom-control-input" type="radio" value="appartement">
+                <span class="custom-control-label"> Appartement </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='bureau' class="custom-control-input" type="radio"  value="bureau">
+                <span class="custom-control-label"> Bureau </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='commerce' class="custom-control-input" type="radio"  value="commerce">
+                <span class="custom-control-label"> Local commercial </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='verger' class="custom-control-input" type="radio"  value="verger">
+                <span class="custom-control-label"> Verger </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='hangar' class="custom-control-input" type="radio"  value="hangar">
+                <span class="custom-control-label"> Hangar </span>
+            </label>
+        </div>
+          <button type="button" class="btn btn-success" id="validerCategorie">Valider</button>`
+      );
+    }
+
+    function choisirCategorieLouer(): void {
+      typing(900);
+      setTimeout(addResponseMsg, 1000, 'Que souhaitez vous louer ?');
+      setTimeout(
+        addResponseMsg,
+        1500,
+        `<div class="form-group categorie">
+            <label class="custom-control custom-radio">
+                <input name='cat' id='tout'  class="custom-control-input" checked="" type="radio" value="tout">
+                <span class="custom-control-label"> Toutes catégories </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='terrain' class="custom-control-input" type="radio" value="terrain">
+                <span class="custom-control-label"> Terrain </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='maison' class="custom-control-input" type="radio" value="maison">
+                <span class="custom-control-label"> Maison </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='chambre' class="custom-control-input" type="radio" value="chambre">
+                <span class="custom-control-label"> Chambre </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='appartement' class="custom-control-input" type="radio" value="appartement">
+                <span class="custom-control-label"> Appartement </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='bureau' class="custom-control-input" type="radio"  value="bureau">
+                <span class="custom-control-label"> Bureau </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='commerce' class="custom-control-input" type="radio"  value="commerce">
+                <span class="custom-control-label"> Local commercial </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='verger' class="custom-control-input" type="radio"  value="verger">
+                <span class="custom-control-label"> Verger </span>
+            </label>
+            <label class="custom-control custom-radio">
+                <input name='cat' id='hangar' class="custom-control-input" type="radio"  value="hangar">
+                <span class="custom-control-label"> Hangar </span>
+            </label>
+        </div>
+          <button type="button" class="btn btn-success" id="validerCategorie">Valider</button>`
+      );
+    }
+
+    function exposer(): void {
+      if (level === 5) {
+        level = 6;
+        if (lastText !== 'EXPOSER UN BIEN') {
+          addMsg('Exposer un bien');
+        }
+        alert('exposer');
+      }
+    }
+
+    function connaissanceOui(): void {
       if (level === 1) {
-        level = 2;
+        level = 5;
         if (lastText !== 'OUI') {
           addMsg('Oui');
+        }
+        typing(1900);
+        setTimeout(addResponseMsg, 2000, 'Je suis heureuse de vous assister à nouveau');
+        setTimeout(addResponseMsg, 2500, 'dites moi, que souheitez vous faire ?');
+        setTimeout(
+          addResponseMsg,
+          3500,
+          `<button type="button" style='margin : 5px;' class="btn btn-success" id="acheter">Acheter</button> 
+          <button type="button" style='margin : 5px;' class="btn btn-success" id="louer">Louer</button>
+          <button type="button" style='margin : 5px;' class="btn btn-success" id="exposer">exposer un bien</button>
+          `
+        );
+      }
+    }
+
+    function connaissanceNon(): void {
+      if (level === 1) {
+        level = 2;
+        if (lastText !== 'Non') {
+          addMsg('Non');
         }
         typing(1900);
         setTimeout(addResponseMsg, 2000, "&#128525 &#128525 &#128525 !!! je commençais à m'ennuyer ");
         setTimeout(addResponseMsg, 2500, "Et si nous faisons connaissant ? Je m'appelle Arame Bot, Et vous ? ");
       }
     }
+
     function clientNom(): void {
       level = 3;
       typing(1900);
@@ -187,7 +570,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       level = 5;
       typing(1900);
       setTimeout(addResponseMsg, 2000, "c'est noté " + nom);
-      // setTimeout(addResponseMsg, 3000, `Pour ne pas vous appelez à une heure qui vous convient pas`);
+      setTimeout(addResponseMsg, 2500, 'dites moi, que souheitez vous faire ?');
+      setTimeout(
+        addResponseMsg,
+        3500,
+        `<button type="button" style='margin : 5px;' class="btn btn-success" id="acheter">Acheter</button> 
+          <button type="button" style='margin : 5px;' class="btn btn-success" id="louer">Louer</button>
+          <button type="button" style='margin : 5px;' class="btn btn-success" id="exposer">exposer un bien</button>`
+      );
     }
   }
 
