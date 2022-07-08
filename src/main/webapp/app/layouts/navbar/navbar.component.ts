@@ -12,6 +12,7 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 import { default as autoComp } from 'content/assets/js/autocompilation';
 import { default as initJs } from 'content/assets/js/index.bundle';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'jhi-navbar',
@@ -19,6 +20,7 @@ import { default as initJs } from 'content/assets/js/index.bundle';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
+  rechercheAcceuil!: FormGroup;
   inProduction?: boolean;
   isNavbarCollapsed = true;
   languages = LANGUAGES;
@@ -44,6 +46,9 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.rechercheAcceuil = new FormGroup({
+      adresse: new FormControl('', Validators.minLength(25)),
+    });
     this.entitiesNavbarItems = EntityNavbarItems;
     this.profileService.getProfileInfo().subscribe(profileInfo => {
       this.inProduction = profileInfo.inProduction;
@@ -74,7 +79,10 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     } else {
       const getUrl = window.location;
       const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
-      const monurl = baseUrl + 'recherche';
+      let monurl = baseUrl + 'recherche';
+      if (String($('#categories').val()) !== 'tout') {
+        monurl = monurl + `?lat=14.656875015645937&lng=-14.833755006747824&categories=${String($('#categories').val())}`;
+      }
       window.location.href = monurl;
     }
   }
@@ -126,5 +134,78 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     } else {
       return false;
     }
+  }
+
+  acheterTerrain(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + 'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=terrain&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  acheterMaison(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + 'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=maison&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  acheterAppartement(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl +
+      'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=appartement&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  acheterHangar(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + 'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=hangar&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  acheterBureau(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + 'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=bureau&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  acheterCommerce(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + 'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=commerce&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  acheterVerger(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + 'recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=verger&transac=vendre&carte=false&sansfiltre=true';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
+  allerA(transac: string, cat: string): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + `recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=${cat}&transac=${transac}&carte=false&sansfiltre=true`;
+    window.location.href = monurl;
+    this.collapseNavbar();
   }
 }

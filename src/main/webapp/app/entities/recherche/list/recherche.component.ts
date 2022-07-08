@@ -13,6 +13,7 @@ import { IPositionElements } from 'ngx-infinite-scroll';
 import { Transaction } from 'app/entities/enumerations/transaction.model';
 import { DetailPropriete } from 'app/entities/detail-propriete/detail-propriete.model';
 import { TypeDeBien } from 'app/entities/enumerations/type-de-bien.model';
+import { EmailService } from 'app/email.service';
 @Component({
   selector: 'jhi-recherche',
   templateUrl: './recherche.component.html',
@@ -26,11 +27,13 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   nbpUrl = true;
   entrer = true;
   map2Init = false;
+  sansFiltre = false;
   private map: any;
   private map2: any;
 
   constructor(
     protected proprieteService: ProprieteService,
+    protected emailService: EmailService,
     protected dataUtils: DataUtils,
     protected rechercheService: RechercheService,
     protected modalService: NgbModal
@@ -517,8 +520,15 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.fullDetail();
       }
     }
+    const sansfiltre = urlCoordonnees.searchParams.get('sansfiltre');
+    if (sansfiltre) {
+      if (sansfiltre === 'true') {
+        this.sansOptionFiltre();
+      }
+    }
     const ref = urlCoordonnees.searchParams.get('ref');
     if (ref) {
+      this.sansOptionFiltre();
       this.proprietesInitial?.forEach(propr => {
         if (propr.reference === ref) {
           this.displayDetail(propr);
@@ -612,42 +622,50 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
           window.location.href = monurl;
         }
       }
-      const cat = urlCoordonnees.searchParams.get('categories');
-      if (cat) {
-        // verifier si la categorie passée depuis url exist dans categories sinon categories = tout
-        if ($('#categories option[value=' + cat + ']').length > 0) {
-          $('#categories').val(cat);
-        } else {
-          $('#categories').val('tout');
-          const newurlCoordonnees = new URL(window.location.href);
-          newurlCoordonnees.searchParams.set('categories', 'tout');
-          window.history.pushState('object or string', 'Recherches', String(newurlCoordonnees));
-        }
-        // fin verifier si la categorie passée depuis url exist dans categories sinon categories = tout
-
-        // on verifier si la categorie possede des pieces ou pas et traite
-        if (
-          $('#categories').val() === 'terrain' ||
-          $('#categories').val() === 'chambre' ||
-          $('#categories').val() === 'hangar' ||
-          $('#categories').val() === 'verger'
-        ) {
-          $('#nbpiecesBox').hide(0);
-          $('#catBox').removeClass('col-sm-12 col-lg-6 col-md-6');
-          $('#catBox').addClass('col-12');
-        } else {
-          $('#nbpiecesBox').show(500);
-          $('#catBox').removeClass('col-12');
-          $('#catBox').addClass('col-sm-12 col-lg-6 col-md-6');
-        }
-        // fin on verifier si la categorie possede des pieces ou pas et traite
-      }
     } else {
       urlCoordonnees.searchParams.append('lat', '14.656875015645937');
       urlCoordonnees.searchParams.append('lng', '-14.833755006747824');
       this.map.flyTo([14.656875015645937, -14.833755006747824], 7);
       // window.history.pushState('object or string', 'Recherches', 'recherche');
       window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
+    }
+
+    const sansfiltre = urlCoordonnees.searchParams.get('sansfiltre');
+    if (sansfiltre) {
+      if (sansfiltre === 'true') {
+        this.sansOptionFiltre();
+      }
+    }
+
+    const cat = urlCoordonnees.searchParams.get('categories');
+    if (cat) {
+      // verifier si la categorie passée depuis url exist dans categories sinon categories = tout
+      if ($('#categories option[value=' + cat + ']').length > 0) {
+        $('#categories').val(cat);
+      } else {
+        $('#categories').val('tout');
+        const newurlCoordonnees = new URL(window.location.href);
+        newurlCoordonnees.searchParams.set('categories', 'tout');
+        window.history.pushState('object or string', 'Recherches', String(newurlCoordonnees));
+      }
+      // fin verifier si la categorie passée depuis url exist dans categories sinon categories = tout
+
+      // on verifier si la categorie possede des pieces ou pas et traite
+      if (
+        $('#categories').val() === 'terrain' ||
+        $('#categories').val() === 'chambre' ||
+        $('#categories').val() === 'hangar' ||
+        $('#categories').val() === 'verger'
+      ) {
+        $('#nbpiecesBox').hide(0);
+        $('#catBox').removeClass('col-sm-12 col-lg-6 col-md-6');
+        $('#catBox').addClass('col-12');
+      } else {
+        $('#nbpiecesBox').show(500);
+        $('#catBox').removeClass('col-12');
+        $('#catBox').addClass('col-sm-12 col-lg-6 col-md-6');
+      }
+      // fin on verifier si la categorie possede des pieces ou pas et traite
     }
 
     const nbP = urlCoordonnees.searchParams.get('nbp');
@@ -886,7 +904,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   tester(): void {
-    $('#meuble').prop('checked', true);
+    this.emailService.envoyeremail('xamalteam@gmail.com', 'mon sujet', 'mon message dynamique').subscribe();
   }
 
   plusDecriete(): void {
@@ -961,6 +979,11 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       initJs();
     }
     window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
+  }
+
+  sansOptionFiltre(): void {
+    $('#zoneFiltreOptions').hide();
+    // style="opacity: 0; height:0; "
   }
 
   transaction(val: string): void {

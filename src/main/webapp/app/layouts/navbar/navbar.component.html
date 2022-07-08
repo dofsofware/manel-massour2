@@ -311,26 +311,28 @@
               <li class="nav-item dropdown">
                 <a class="nav-link active dropdown-toggle" href="#" data-toggle="dropdown"> Acheter </a>
                 <ul class="dropdown-menu dropdown-menu-left animate fade-up">
-                  <li><a class="dropdown-item" href="#"> Terrain </a></li>
-                  <li><a class="dropdown-item" href="#"> Maison </a></li>
-                  <li><a class="dropdown-item" href="#"> Appartement </a></li>
-                  <li><a class="dropdown-item" href="#"> Bureau </a></li>
-                  <li><a class="dropdown-item" href="#"> Local de commerce </a></li>
-                  <li><a class="dropdown-item" href="#"> Verger </a></li>
-                  <li><a class="dropdown-item" href="#"> Hangar </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'terrain')"> Terrain </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'maison')"> Maison </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'appartement')"> Appartement </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'bureau')"> Bureau </a></li>
+                  <li>
+                    <a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'commerce')"> Local de commerce </a>
+                  </li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'verger')"> Verger </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'hangar')"> Hangar </a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"> Louer </a>
                 <ul class="dropdown-menu animate fade-up">
-                  <li><a class="dropdown-item" href="#"> Terrain </a></li>
-                  <li><a class="dropdown-item" href="#"> Maison </a></li>
-                  <li><a class="dropdown-item" href="#"> Chambre </a></li>
-                  <li><a class="dropdown-item" href="#"> Appartement </a></li>
-                  <li><a class="dropdown-item" href="#"> Bureau </a></li>
-                  <li><a class="dropdown-item" href="#"> Local de commerce </a></li>
-                  <li><a class="dropdown-item" href="#"> Verger </a></li>
-                  <li><a class="dropdown-item" href="#"> Hangar </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'terrain')"> Terrain </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'maison')"> Maison </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'chambre')"> Chambre </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'appartement')"> Appartement </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'bureau')"> Bureau </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'commerce')"> Local de commerce </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'verger')"> Verger </a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'hangar')"> Hangar </a></li>
                 </ul>
               </li>
               <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="recherche()"> Rechercher </a></li>
@@ -388,49 +390,52 @@
                 <p>C'est une histoire de confiance</p>
 
                 <!-- SEARCH BAR -->
-                <div class="wrapper__section" id="rechercheLocal">
-                  <div class="wrapper__section__components">
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <!-- <h3 class="section_heading mt-4">Form Search with Categories</h3> -->
-                        <div class="search__container">
-                          <div class="row input-group no-gutters">
-                            <div class="col-sm-12 col-md-5">
-                              <input
-                                autocomplete="off"
-                                role="presentation"
-                                type="text"
-                                id="search"
-                                class="auto-search-wrapper form-control"
-                                aria-label="Text input"
-                                placeholder="Commune, Arrondissement ou Region . . . ."
-                              />
-                              <input type="text" id="result" style="display: none" />
-                            </div>
-                            <div class="col-sm-12 col-md-4 input-group">
-                              <select class="select_option form-control" name="select" id="categories">
-                                <option value="tout">Toutes Catégories</option>
-                                <option value="terrain">Terrain</option>
-                                <option value="maison">Maison</option>
-                                <option value="appartement">Appartement</option>
-                                <option value="bureau">Bureau</option>
-                                <option value="chambre">Chambre</option>
-                                <option value="commerce">Local Commercial</option>
-                                <option value="verger">Verger</option>
-                                <option value="hangar">Hangar</option>
-                              </select>
-                            </div>
-                            <div class="col-sm-12 col-md-3 input-group-append">
-                              <button id="rechercher" class="btn btn-primary btn-block" type="submit" (click)="rechercher()">
-                                <i class="fa fa-search"></i> <span class="ml-1 text-uppercase">Rechercher</span>
-                              </button>
+                <form [formGroup]="rechercheAcceuil">
+                  <div class="wrapper__section" id="rechercheLocal">
+                    <div class="wrapper__section__components">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <!-- <h3 class="section_heading mt-4">Form Search with Categories</h3> -->
+                          <div class="search__container">
+                            <div class="row input-group no-gutters">
+                              <div class="col-sm-12 col-md-5">
+                                <input
+                                  formControlName="adresse"
+                                  autocomplete="off"
+                                  role="presentation"
+                                  type="text"
+                                  id="search"
+                                  class="auto-search-wrapper form-control"
+                                  aria-label="Text input"
+                                  placeholder="Commune, Arrondissement ou Region . . . ."
+                                />
+                                <input type="text" id="result" style="display: none" />
+                              </div>
+                              <div class="col-sm-12 col-md-4 input-group">
+                                <select class="select_option form-control" name="select" id="categories">
+                                  <option value="tout">Toutes Catégories</option>
+                                  <option value="terrain">Terrain</option>
+                                  <option value="maison">Maison</option>
+                                  <option value="appartement">Appartement</option>
+                                  <option value="bureau">Bureau</option>
+                                  <option value="chambre">Chambre</option>
+                                  <option value="commerce">Local Commercial</option>
+                                  <option value="verger">Verger</option>
+                                  <option value="hangar">Hangar</option>
+                                </select>
+                              </div>
+                              <div class="col-sm-12 col-md-3 input-group-append">
+                                <button id="rechercher" class="btn btn-primary btn-block" type="submit" (click)="rechercher()">
+                                  <i class="fa fa-search"></i> <span class="ml-1 text-uppercase">Rechercher</span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -456,26 +461,26 @@
             <li class="nav-item dropdown">
               <a class="nav-link active dropdown-toggle" href="#" data-toggle="dropdown"> Acheter </a>
               <ul class="dropdown-menu dropdown-menu-left animate fade-up">
-                <li><a class="dropdown-item" href="#"> Terrain </a></li>
-                <li><a class="dropdown-item" href="#"> Maison </a></li>
-                <li><a class="dropdown-item" href="#"> Appartement </a></li>
-                <li><a class="dropdown-item" href="#"> Bureau </a></li>
-                <li><a class="dropdown-item" href="#"> Local de commerce </a></li>
-                <li><a class="dropdown-item" href="#"> Verger </a></li>
-                <li><a class="dropdown-item" href="#"> Hangar </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'terrain')"> Terrain </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'maison')"> Maison </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'appartement')"> Appartement </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'bureau')"> Bureau </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'commerce')"> Local de commerce </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'verger')"> Verger </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('vendre', 'hangar')"> Hangar </a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"> Louer </a>
               <ul class="dropdown-menu animate fade-up">
-                <li><a class="dropdown-item" href="#"> Terrain </a></li>
-                <li><a class="dropdown-item" href="#"> Maison </a></li>
-                <li><a class="dropdown-item" href="#"> Chambre </a></li>
-                <li><a class="dropdown-item" href="#"> Appartement </a></li>
-                <li><a class="dropdown-item" href="#"> Bureau </a></li>
-                <li><a class="dropdown-item" href="#"> Local de commerce </a></li>
-                <li><a class="dropdown-item" href="#"> Verger </a></li>
-                <li><a class="dropdown-item" href="#"> Hangar </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'terrain')"> Terrain </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'maison')"> Maison </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'chambre')"> Chambre </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'appartement')"> Appartement </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'bureau')"> Bureau </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'commerce')"> Local de commerce </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'verger')"> Verger </a></li>
+                <li><a class="dropdown-item" href="javascript:void(0);" (click)="allerA('louer', 'hangar')"> Hangar </a></li>
               </ul>
             </li>
             <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="recherche()"> Rechercher </a></li>

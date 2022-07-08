@@ -49,10 +49,20 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    #    host: localhost
+    #    port: 25
+    #    username:
+    #    password:
+    host: mail45.lwspanel.com
+    port: 587
+    username: contact@tech-xel.com
+    password: Ouzinaramouzlayassctd2@simvas
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: mail45.lwspanel.com
   thymeleaf:
     cache: true
   sleuth:

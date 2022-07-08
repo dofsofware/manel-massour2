@@ -6,6 +6,7 @@ import com.techxel.buntu.security.SecurityUtils;
 import com.techxel.buntu.service.MailService;
 import com.techxel.buntu.service.UserService;
 import com.techxel.buntu.service.dto.AdminUserDTO;
+import com.techxel.buntu.service.dto.EmailDTO;
 import com.techxel.buntu.service.dto.PasswordChangeDTO;
 import com.techxel.buntu.web.rest.errors.*;
 import com.techxel.buntu.web.rest.vm.KeyAndPasswordVM;
@@ -71,6 +72,14 @@ public class AccountResource {
      * @param key the activation key.
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
+
+    @PostMapping("/envoyeremail")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmailDTO envoyeremail(@Valid @RequestBody EmailDTO emailDTO) {
+        mailService.sendEmail(emailDTO.getEmail(), emailDTO.getSujet(), emailDTO.getContenu(), true, true);
+        return emailDTO;
+    }
+
     @GetMapping("/activate")
     public void activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
