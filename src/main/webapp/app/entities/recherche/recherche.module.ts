@@ -8,9 +8,10 @@ import { RechercheRoutingModule } from './route/recherche-routing.module';
 import { ChangerpipePipe } from 'app/changerpipe.pipe';
 import { Typedepapier } from 'app/typedepapierpipe.pipe';
 import { RecaptchaModule } from 'ng-recaptcha';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [SharedModule, RechercheRoutingModule, RecaptchaModule],
+  imports: [SharedModule, RechercheRoutingModule, RecaptchaModule, FormsModule],
   declarations: [
     RechercheComponent,
     RechercheDetailComponent,

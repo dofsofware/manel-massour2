@@ -14,6 +14,7 @@ import { Transaction } from 'app/entities/enumerations/transaction.model';
 import { DetailPropriete } from 'app/entities/detail-propriete/detail-propriete.model';
 import { TypeDeBien } from 'app/entities/enumerations/type-de-bien.model';
 import { EmailService } from 'app/email.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'jhi-recherche',
   templateUrl: './recherche.component.html',
@@ -22,12 +23,20 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   proprietesInitial?: IPropriete[];
   proprietes?: IPropriete[];
   proprieteDetail?: IPropriete;
+  alertSubmitted = false;
   isLoading = false;
   recaptcha_ = true;
   nbpUrl = true;
   entrer = true;
   map2Init = false;
   sansFiltre = false;
+  alertMessage = false;
+  propriteInitialise = false;
+  TelAlerte = '';
+  EmailAlerte = '';
+  alertFormGroup!: FormGroup;
+  commandeFormGroup!: FormGroup;
+  recaptchaContenu: string;
   private map: any;
   private map2: any;
 
@@ -37,7 +46,9 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     protected dataUtils: DataUtils,
     protected rechercheService: RechercheService,
     protected modalService: NgbModal
-  ) {}
+  ) {
+    this.recaptchaContenu = '';
+  }
 
   ngAfterViewChecked(): void {
     if (this.entrer === true && $('.card__box-v1').length > 0) {
@@ -54,6 +65,24 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.nbpUrl = false;
     }
     $('#return-to-top').css('display', 'none');
+    const urlCoordonnees = new URL(window.location.href);
+    const sansfiltre = urlCoordonnees.searchParams.get('sansfiltre');
+    if (sansfiltre) {
+      if (sansfiltre === 'true') {
+        this.sansOptionFiltre();
+      }
+    }
+    if (this.propriteInitialise === true) {
+      this.propriteInitialise = false;
+      const ref = urlCoordonnees.searchParams.get('ref');
+      if (ref) {
+        this.proprietesInitial?.forEach(propr => {
+          if (propr.reference === ref) {
+            this.displayDetail(propr);
+          }
+        });
+      }
+    }
   }
 
   sortBy(trierPar: string): void {
@@ -279,6 +308,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.isLoading = false;
         this.proprietes = res.body ?? [];
         this.proprietesInitial = res.body ?? [];
+        this.propriteInitialise = true;
       },
       error: () => {
         this.isLoading = false;
@@ -296,7 +326,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     let localDecommerce = 0;
     let verger = 0;
     let hangar = 0;
-    this.proprietesInitial!.forEach(propriete => {
+    this.proprietesInitial?.forEach(propriete => {
       tout++;
       if (propriete.type === TypeDeBien.MAISON) {
         maison++;
@@ -513,6 +543,16 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   ngOnInit(): void {
+    this.alertFormGroup = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      tel: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9)]),
+    });
+    this.commandeFormGroup = new FormGroup({
+      nom: new FormControl('', [Validators.required]),
+      message: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      tel: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9)]),
+    });
     const urlCoordonnees = new URL(window.location.href);
     const carte = urlCoordonnees.searchParams.get('carte');
     if (carte) {
@@ -526,15 +566,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
         this.sansOptionFiltre();
       }
     }
-    const ref = urlCoordonnees.searchParams.get('ref');
-    if (ref) {
-      this.sansOptionFiltre();
-      this.proprietesInitial?.forEach(propr => {
-        if (propr.reference === ref) {
-          this.displayDetail(propr);
-        }
-      });
-    }
+
     this.loadAll();
   }
 
@@ -724,15 +756,6 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       }
     }
 
-    const ref = urlCoordonnees.searchParams.get('ref');
-    if (ref) {
-      this.proprietesInitial?.forEach(propr => {
-        if (propr.reference === ref) {
-          this.displayDetail(propr);
-        }
-      });
-    }
-
     const max = urlCoordonnees.searchParams.get('max');
     if (max) {
       if ($.isNumeric(max)) {
@@ -833,6 +856,8 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     const ref = urlCoordonnees.searchParams.get('ref');
     if (!ref) {
       urlCoordonnees.searchParams.append('ref', this.proprieteDetail.reference!);
+    } else {
+      urlCoordonnees.searchParams.set('ref', this.proprieteDetail.reference!);
     }
     window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
     $('#resultList').hide(0);
@@ -892,6 +917,15 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     $('.bluebox').css({
       width: `${$('.slider__image__detail-large-one').width()!}px`,
     });
+    const sansfiltre = urlCoordonnees.searchParams.get('sansfiltre');
+    if (sansfiltre) {
+      if (sansfiltre !== 'true') {
+        $('#zoneFiltreOptions').show();
+      }
+    } else {
+      $('#zoneFiltreOptions').show();
+    }
+
     initJs();
   }
 
@@ -900,7 +934,18 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   resolved(captchaResponse: string): void {
-    this.recaptcha_ = false;
+    this.recaptchaContenu = captchaResponse;
+  }
+
+  commander(): void {
+    if (this.recaptchaContenu === '') {
+      this.recaptcha_ = false;
+      setTimeout(() => {
+        this.recaptcha_ = true;
+      }, 3000);
+    } else {
+      // a faire
+    }
   }
 
   tester(): void {
@@ -982,8 +1027,11 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   sansOptionFiltre(): void {
+    $('#footer').hide();
     $('#zoneFiltreOptions').hide();
-    // style="opacity: 0; height:0; "
+    $('#map').hide();
+    $('.grilleVersion2').removeClass('col-md-6');
+    $('.grilleVersion2').addClass('col-md-4');
   }
 
   transaction(val: string): void {
@@ -1042,6 +1090,18 @@ Bien cordialement`);
     }
   }
 
+  activerAlerte(): void {
+    this.alertMessage = true;
+    this.alertSubmitted = true;
+    const tel = this.TelAlerte;
+    const email = this.EmailAlerte;
+
+    this.EmailAlerte = '';
+    this.TelAlerte = '';
+    setTimeout(() => {
+      this.alertMessage = false;
+    }, 3000);
+  }
   modifierType(val: any): any {
     if (val === 'MAISON') {
       val = 'la maison';

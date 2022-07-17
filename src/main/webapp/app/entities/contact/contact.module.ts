@@ -5,9 +5,10 @@ import { ContactDetailComponent } from './detail/contact-detail.component';
 import { ContactUpdateComponent } from './update/contact-update.component';
 import { ContactDeleteDialogComponent } from './delete/contact-delete-dialog.component';
 import { ContactRoutingModule } from './route/contact-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [SharedModule, ContactRoutingModule],
+  imports: [SharedModule, ContactRoutingModule, ReactiveFormsModule],
   declarations: [ContactComponent, ContactDetailComponent, ContactUpdateComponent, ContactDeleteDialogComponent],
   entryComponents: [ContactDeleteDialogComponent],
 })

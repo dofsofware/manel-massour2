@@ -573,8 +573,18 @@
   height: 80px;
 }
 .captcha_ {
-  position: absolute;
-  left: calc(75% - 304px) !important;
+  /* position: absolute;
+  left: calc(75% - 304px) !important; */
+  -webkit-transform: scale(0.77);
+  -moz-transform: scale(0.77);
+  -ms-transform: scale(0.77);
+  -o-transform: scale(0.77);
+  transform: scale(0.77);
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  -o-transform-origin: 0 0;
+  transform-origin: 0 0;
 }
 @media only screen and (max-width: 991px) {
   .captcha_ {

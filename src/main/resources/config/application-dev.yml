@@ -112,6 +112,8 @@ jhipster:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
         base64-secret: NTJmMWRkNzJlODVmMWRmNmU4MTcyYzQ1ZTBjNDE1ZTg3MGM0OGY2ODExMDc5MjRjMDMxMTRiYmMyYzIxN2IxMDlkZDM0OTFhNzkxZDM4YTM4Zjc5MjAwNWFlNTMxNWM4ODg3MGVhZDM1MjY5YzU3OGY2ZjMzMjM2MzliYjIxMWM=
         # Token is valid 24 hours
+        #token-validity-in-seconds: 86400
+        # Token is valid 24 hours
         token-validity-in-seconds: 2592000
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties

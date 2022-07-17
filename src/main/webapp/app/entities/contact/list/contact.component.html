@@ -19,43 +19,80 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        <h5>contactez nous</h5>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group form-group-name">
-              <label>Nom* <span class="required"></span></label>
-              <input type="text" class="form-control" name="name" required="" />
+        <form [formGroup]="contactFormGroup">
+          <h5>contactez nous</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group form-group-name">
+                <label>Nom* <span class="required"></span></label>
+                <input type="text" class="form-control" formControlName="nom" />
+                <div
+                  *ngIf="contactFormGroup.get('nom')?.touched && contactFormGroup.get('nom')?.hasError('required')"
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  le nom est obligatoire
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group form-group-name">
-              <label>Email* <span class="required"></span></label>
-              <input type="email" class="form-control" name="email" required="" />
+            <div class="col-md-6">
+              <div class="form-group form-group-name">
+                <label>Email* <span class="required"></span></label>
+                <input type="email" class="form-control" formControlName="email" />
+                <div
+                  *ngIf="contactFormGroup.get('email')?.touched && contactFormGroup.get('email')?.hasError('required')"
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  l'email est obligatoire
+                </div>
+                <div
+                  *ngIf="contactFormGroup.get('email')?.touched && contactFormGroup.get('email')?.hasError('email')"
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  l'email est invalide
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div class="col-md-6">
-            <div class="form-group form-group-name">
-              <label>Site web <span class="required"></span></label>
-              <input type="text" class="form-control" name="website" required="" />
+            <div class="col-md-6">
+              <div class="form-group form-group-name">
+                <label>Site web <span class="required"></span></label>
+                <input type="text" class="form-control" name="website" />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group form-group-name">
+                <label>Sujet* <span class="required"></span></label>
+                <input type="text" class="form-control" formControlName="sujet" />
+                <div
+                  *ngIf="contactFormGroup.get('sujet')?.touched && contactFormGroup.get('sujet')?.hasError('required')"
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  le sujet est obligatoire
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Message* </label>
+                <textarea class="form-control" rows="9" formControlName="message"></textarea>
+                <div
+                  *ngIf="contactFormGroup.get('message')?.touched && contactFormGroup.get('message')?.hasError('required')"
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  le message est obligatoire
+                </div>
+              </div>
+              <div class="form-group float-right mb-0">
+                <button type="submit" [disabled]="!contactFormGroup.valid" class="btn btn-primary btn-contact">Envoyer</button>
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group form-group-name">
-              <label>Sujet* <span class="required"></span></label>
-              <input type="text" class="form-control" name="subject" required="" />
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label>Message* </label>
-              <textarea class="form-control" rows="9" name="message"></textarea>
-            </div>
-            <div class="form-group float-right mb-0">
-              <button type="submit" class="btn btn-primary btn-contact">Envoyer</button>
-            </div>
-          </div>
-        </div>
+        </form>
       </div>
 
       <div class="col-md-4">
