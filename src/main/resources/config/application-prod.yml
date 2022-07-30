@@ -53,16 +53,26 @@ spring:
     #    port: 25
     #    username:
     #    password:
-    host: mail45.lwspanel.com
+    #host: mail45.lwspanel.com
+    #port: 587
+    #username: contact@tech-xel.com
+    #password: Ouzinaramouzlayassctd2@simvas
+    #protocol: smtp
+    #tls: true
+    #properties.mail.smtp:
+    #  auth: true
+    #  starttls.enable: true
+    #  ssl.trust: mail45.lwspanel.com
+    host: smtp.gmail.com
     port: 587
-    username: contact@tech-xel.com
-    password: Ouzinaramouzlayassctd2@simvas
+    username: xamalteam@gmail.com #Replace this field with your Gmail username.
+    password: sdpscqohlpjbfgzk #Replace this field with your Gmail password/App password.
     protocol: smtp
     tls: true
     properties.mail.smtp:
       auth: true
       starttls.enable: true
-      ssl.trust: mail45.lwspanel.com
+      ssl.trust: smtp.gmail.com
   thymeleaf:
     cache: true
   sleuth:

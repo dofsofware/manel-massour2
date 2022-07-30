@@ -103,6 +103,54 @@
                 <span jhiTranslate="global.menu.entities.detailPropriete">Detail Propriete</span>
               </a>
             </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="engagement"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.engagement">Engagement</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="acheter"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.acheter">Acheter</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="louer"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.louer">Louer</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="estimer"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.estimer">Estimer</span>
+              </a>
+            </li>
             <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
           </ul>
         </li>
@@ -258,13 +306,13 @@
       <div class="col-sm-12 col-md-10">
         <div class="row align-items-center">
           <div class="col-lg-9" style="text-align: center">
-            <h2 class="text-uppercase text-white">TEXTE POUR METTRE EN CONFIANCE LE CLIENT</h2>
+            <h2 class="text-uppercase text-white">Engagement Solennel</h2>
             <p class="text-capitalize text-white">
-              du text encore du texte et toujours du texte du text encore du texte et toujours du texte
+              Double assurances aux clients qui souhaitent acheter ou louer à travers notre plateforme
             </p>
           </div>
           <div class="col-lg-3">
-            <a href="#" class="btn btn-light text-uppercase" id="testerbtn"
+            <a (click)="engagement()" class="btn btn-light text-uppercase"
               >en savoir plus <i class="fa fa-angle-right ml-3 arrow-btn"></i
             ></a>
           </div>

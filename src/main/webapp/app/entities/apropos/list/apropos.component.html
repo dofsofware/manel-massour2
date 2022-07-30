@@ -18,34 +18,33 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6">
-        <div class="title__leading">
-          <!-- <h6 class="text-uppercase">trusted By thousands</h6> -->
-          <h2 class="text-capitalize">du texte encore du texte</h2>
-          <p>
-            du texte encore du texte toujours du texte du texte encore du texte toujours du texte du texte encore du texte toujours du texte
-            du texte encore du texte toujours du texte du texte encore du texte toujours du texte du texte encore du texte toujours du texte
+        <div class="single__blog-detail" style="text-align: justify">
+          <p class="drop-cap">
+            Notre histoire, c'est l'histoire de 3 jeunes sénégalais lambda, née du contraste entre le rêve ardent et noble d'acquérir pour
+            lui et sa famille un chez-soi (terrain, maison, appartement.) et la frustration de constater tous les obstacles, le chemin
+            parsemé d'embûches pour réaliser ce vœu si cher : litiges fonciers, intermédiaires et courtiers véreux, sites internet peu
+            fiables et non intuitifs… La plate-forme Buntu est donc créée pour résoudre ce problème. Avec une technologie de pointe alliant
+            Intelligence Artificielle et Technique de Géolocalisation (GIS, Google Maps), elle vous permettra de naviguer aisément,
+            intuitivement sur la plateforme, et accéder à toutes les informations relatives à un bien en un clic Buntu c’est aussi un
+            accompagnement et suivi personnalisé pour votre projet d’achat ou de construction de maisons : de la recherche de financement
+            avec des modalités de paiement mensuel très souples, à la construction clé en main de votre « chez-soi » en passant par les
+            démarches administratives et plans architecturaux. Plus important, Buntu est plus qu’une simple plateforme digitale immobilière,
+            elle est une histoire de CONFIANCE entre vous et nous. L’intégrité et la transparence étant la clé de voûte de notre business
+            model, vous pouvez avoir la certitude qu’avec Buntu votre investissement est sécurisé. Lire notre
+            <a href="javascript:void(0)" (click)="engagement()"><b> « engagement solennel »</b></a> pour en savoir plus
           </p>
-          <p>
-            du texte encore du texte toujours du texte du texte encore du texte toujours du texte du texte encore du texte toujours du texte
-            du texte encore du texte toujours du texte du texte encore du texte toujours du texte du texte encore du texte toujours du texte
-          </p>
-          <p>
-            du texte encore du texte toujours du texte du texte encore du texte toujours du texte du texte encore du texte toujours du texte
-            du texte encore du texte toujours du texte du texte encore du texte toujours du texte du texte encore du texte toujours du texte
-          </p>
-          <a href="#" class="btn btn-primary mt-3 text-capitalize"> Lire Plus <i class="fa fa-angle-right ml-3"></i></a>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="about__image">
           <div class="about__image-top">
             <div class="about__image-top-hover">
-              <img src="../../content/assets/images/600x400.jpg" alt="" class="img-fluid" />
+              <img src="../../content/assets/images/BUNTU_1920x1080.jpg" alt="" class="img-fluid" />
             </div>
           </div>
           <div class="about__image-bottom">
             <div class="about__image-bottom-hover">
-              <img src="../../content/assets/images/600x400.jpg" alt="" class="img-fluid" />
+              <img src="../../content/assets/images/BUNTU 1920x1080.jpg" alt="" class="img-fluid" />
             </div>
           </div>
         </div>
@@ -329,9 +328,33 @@
             <div class="widget__form-newsletter">
               <p>Ne manquez pas de vous abonner à nos flux d'actualités, veuillez remplir le formulaire ci-dessous</p>
               <div class="mt-3">
-                <input type="text" class="form-control mb-2" placeholder="Adresse mail" />
+                <form [formGroup]="newslettersFormGroup">
+                  <input [(ngModel)]="email" formControlName="email" type="text" class="form-control mb-2" placeholder="Adresse mail" />
+                  <div *ngIf="alerter" class="alert alert-success" role="alert">votre requête est bien enregistrée avec succès</div>
+                  <div
+                    *ngIf="newslettersFormGroup.get('email')?.touched && newslettersFormGroup.get('email')?.hasError('required')"
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    l'email est obligatoire
+                  </div>
+                  <div
+                    *ngIf="newslettersFormGroup.get('email')?.touched && newslettersFormGroup.get('email')?.hasError('email')"
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    l'email invalide
+                  </div>
 
-                <button class="btn btn-primary btn-block text-capitalize" type="button">S'incrire</button>
+                  <button
+                    [disabled]="!newslettersFormGroup.valid"
+                    (click)="newLetters()"
+                    class="btn btn-primary btn-block text-capitalize"
+                    type="button"
+                  >
+                    S'incrire
+                  </button>
+                </form>
               </div>
             </div>
           </div>

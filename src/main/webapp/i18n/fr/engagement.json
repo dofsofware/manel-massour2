@@ -1,0 +1,23 @@
+{
+  "buntuApp": {
+    "engagement": {
+      "home": {
+        "title": "Engagements",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Engagement",
+        "createOrEditLabel": "Créer ou éditer un Engagement",
+        "notFound": "Aucun Engagement trouvé"
+      },
+      "created": "Un nouveau Engagement a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Engagement avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Engagement avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Engagement {{ id }} ?"
+      },
+      "detail": {
+        "title": "Engagement"
+      },
+      "id": "ID"
+    }
+  }
+}

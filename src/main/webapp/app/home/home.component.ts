@@ -7,6 +7,7 @@ import { Account } from 'app/core/auth/account.model';
 import { default as initJs } from '../../content/assets/js/index.bundle.js';
 import $ from 'jquery';
 import { EmailService } from 'app/email.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'jhi-home',
@@ -15,6 +16,8 @@ import { EmailService } from 'app/email.service';
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   account: Account | null = null;
+  newslettersFormGroup!: FormGroup;
+  alerter = false;
   public email: string;
   private readonly destroy$ = new Subject<void>();
 
@@ -671,16 +674,38 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => (this.account = account));
+    this.newslettersFormGroup = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+    });
   }
 
   newLetters(): void {
-    // if (true) {
     const email = this.email;
+    this.newsletterMAIL(email);
+    this.email = '';
+    this.alerter = true;
+    this.newslettersFormGroup.reset();
+    setTimeout(() => {
+      this.alerter = false;
+    }, 3000);
+  }
+
+  login(): void {
+    this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  newsletterMAIL(email: string): void {
     this.emailService
       .envoyeremail(
-        'cheikh.tidiane@tech-xel.com',
-        'Client ChatBot',
-        `<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%;" class="background"><tr><td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
+        'xamalteam@gmail.com',
+        'NewsLetters',
+        `
+    <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; width: 100%;" class="background"><tr><td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
 	bgcolor="#F0F0F0">
   <br>
 <!-- WRAPPER -->
@@ -721,7 +746,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 			color: #000000;
 			font-family: sans-serif;" class="paragraph">
 				Bonjour Monsieur, Madame,<br/><br/>
-				Demande de souscription au <b style="color: #32B019;">Newletters de BUNTU</b><br/>
+				Ce client souhaite être ajouté à la liste des newsletter de <b style="color: #32B019;">BUNTU</b><br/>
         <b>Données enregistrées : </b><br>
         Email : <b style="color: #32B019;">${email}</b><br>
 				
@@ -752,20 +777,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 </td></tr>
 <br>
-          </table>`
+</table>
+    `
       )
       .subscribe();
-    this.email = '';
-    // }
-  }
-
-  login(): void {
-    this.router.navigate(['/login']);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   tester(): void {

@@ -400,22 +400,14 @@
                                   placeholder="Adresse email"
                                 />
                                 <div
-                                  *ngIf="
-                                    !alertSubmitted &&
-                                    alertFormGroup.get('email')?.touched &&
-                                    alertFormGroup.get('email')?.hasError('required')
-                                  "
+                                  *ngIf="alertFormGroup.get('email')?.touched && alertFormGroup.get('email')?.hasError('required')"
                                   class="alert alert-danger"
                                   role="alert"
                                 >
                                   l'email est obligatoire
                                 </div>
                                 <div
-                                  *ngIf="
-                                    !alertSubmitted &&
-                                    alertFormGroup.get('email')?.touched &&
-                                    alertFormGroup.get('email')?.hasError('email')
-                                  "
+                                  *ngIf="alertFormGroup.get('email')?.touched && alertFormGroup.get('email')?.hasError('email')"
                                   class="alert alert-danger"
                                   role="alert"
                                 >
@@ -431,9 +423,7 @@
                                   placeholder="téléphone"
                                 />
                                 <div
-                                  *ngIf="
-                                    !alertSubmitted && alertFormGroup.get('tel')?.touched && alertFormGroup.get('tel')?.hasError('required')
-                                  "
+                                  *ngIf="alertFormGroup.get('tel')?.touched && alertFormGroup.get('tel')?.hasError('required')"
                                   class="alert alert-danger"
                                   role="alert"
                                 >
@@ -441,7 +431,6 @@
                                 </div>
                                 <div
                                   *ngIf="
-                                    !alertSubmitted &&
                                     alertFormGroup.get('tel')?.touched &&
                                     (alertFormGroup.get('tel')?.hasError('pattern') || alertFormGroup.get('tel')?.hasError('minlength'))
                                   "
@@ -555,22 +544,14 @@
                                     placeholder="Adresse email"
                                   />
                                   <div
-                                    *ngIf="
-                                      !alertSubmitted &&
-                                      alertFormGroup.get('email')?.touched &&
-                                      alertFormGroup.get('email')?.hasError('required')
-                                    "
+                                    *ngIf="alertFormGroup.get('email')?.touched && alertFormGroup.get('email')?.hasError('required')"
                                     class="alert alert-danger"
                                     role="alert"
                                   >
                                     l'email est obligatoire
                                   </div>
                                   <div
-                                    *ngIf="
-                                      !alertSubmitted &&
-                                      alertFormGroup.get('email')?.touched &&
-                                      alertFormGroup.get('email')?.hasError('email')
-                                    "
+                                    *ngIf="alertFormGroup.get('email')?.touched && alertFormGroup.get('email')?.hasError('email')"
                                     class="alert alert-danger"
                                     role="alert"
                                   >
@@ -586,11 +567,7 @@
                                     placeholder="téléphone"
                                   />
                                   <div
-                                    *ngIf="
-                                      !alertSubmitted &&
-                                      alertFormGroup.get('tel')?.touched &&
-                                      alertFormGroup.get('tel')?.hasError('required')
-                                    "
+                                    *ngIf="alertFormGroup.get('tel')?.touched && alertFormGroup.get('tel')?.hasError('required')"
                                     class="alert alert-danger"
                                     role="alert"
                                   >
@@ -598,7 +575,6 @@
                                   </div>
                                   <div
                                     *ngIf="
-                                      !alertSubmitted &&
                                       alertFormGroup.get('tel')?.touched &&
                                       (alertFormGroup.get('tel')?.hasError('pattern') || alertFormGroup.get('tel')?.hasError('minlength'))
                                     "
@@ -1052,6 +1028,7 @@
                         <div class="profile__agent__body">
                           <div class="form-group">
                             <input
+                              [(ngModel)]="nomCommande"
                               type="text"
                               id="nom"
                               formControlName="nom"
@@ -1069,6 +1046,7 @@
                           </div>
                           <div class="form-group">
                             <input
+                              [(ngModel)]="telCommande"
                               type="text"
                               id="tel"
                               formControlName="tel"
@@ -1077,11 +1055,7 @@
                               placeholder="Votre téléphone"
                             />
                             <div
-                              *ngIf="
-                                !alertSubmitted &&
-                                commandeFormGroup.get('tel')?.touched &&
-                                commandeFormGroup.get('tel')?.hasError('required')
-                              "
+                              *ngIf="commandeFormGroup.get('tel')?.touched && commandeFormGroup.get('tel')?.hasError('required')"
                               class="alert alert-danger"
                               role="alert"
                             >
@@ -1089,7 +1063,6 @@
                             </div>
                             <div
                               *ngIf="
-                                !alertSubmitted &&
                                 commandeFormGroup.get('tel')?.touched &&
                                 (commandeFormGroup.get('tel')?.hasError('pattern') || commandeFormGroup.get('tel')?.hasError('minlength'))
                               "
@@ -1101,6 +1074,7 @@
                           </div>
                           <div class="form-group">
                             <input
+                              [(ngModel)]="emailCommande"
                               type="text"
                               id="email"
                               formControlName="email"
@@ -1125,19 +1099,12 @@
                           </div>
                           <div class="form-group mb-0">
                             <textarea
-                              formControlName="message"
+                              [(ngModel)]="messageCommande"
                               id="message"
                               class="form-control"
                               rows="5"
                               placeholder="Votre message"
                             ></textarea>
-                            <div
-                              *ngIf="commandeFormGroup.get('message')?.touched && commandeFormGroup.get('message')?.hasError('required')"
-                              class="alert alert-danger"
-                              role="alert"
-                            >
-                              le message est obligatoire
-                            </div>
                           </div>
                         </div>
                         <div class="captcha">
@@ -1148,6 +1115,9 @@
                           ></re-captcha>
                         </div>
                         <div *ngIf="!recaptcha_" class="alert alert-danger" role="alert">Merci de resoudre le recaptcha SVP</div>
+                        <div *ngIf="alerter" class="alert alert-success" role="alert">
+                          votre requête est bien enregistrée, vous serez contacté(e) dans les 24h
+                        </div>
                         <div class="profile__agent__footer">
                           <div class="form-group mb-0">
                             <button

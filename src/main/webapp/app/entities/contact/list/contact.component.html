@@ -24,8 +24,8 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group form-group-name">
-                <label>Nom* <span class="required"></span></label>
-                <input type="text" class="form-control" formControlName="nom" />
+                <label>Nom * <span class="required"></span></label>
+                <input type="text" [(ngModel)]="nom" class="form-control" formControlName="nom" />
                 <div
                   *ngIf="contactFormGroup.get('nom')?.touched && contactFormGroup.get('nom')?.hasError('required')"
                   class="alert alert-danger"
@@ -37,8 +37,8 @@
             </div>
             <div class="col-md-6">
               <div class="form-group form-group-name">
-                <label>Email* <span class="required"></span></label>
-                <input type="email" class="form-control" formControlName="email" />
+                <label>Email * <span class="required"></span></label>
+                <input type="email" [(ngModel)]="email" class="form-control" formControlName="email" />
                 <div
                   *ngIf="contactFormGroup.get('email')?.touched && contactFormGroup.get('email')?.hasError('required')"
                   class="alert alert-danger"
@@ -58,14 +58,31 @@
 
             <div class="col-md-6">
               <div class="form-group form-group-name">
-                <label>Site web <span class="required"></span></label>
-                <input type="text" class="form-control" name="website" />
+                <label>Téléphone * <span class="required"></span></label>
+                <input type="text" [(ngModel)]="tel" class="form-control" formControlName="tel" />
+                <div
+                  *ngIf="contactFormGroup.get('tel')?.touched && contactFormGroup.get('tel')?.hasError('required')"
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  le Numéro de téléphone est obligatoire
+                </div>
+                <div
+                  *ngIf="
+                    contactFormGroup.get('tel')?.touched &&
+                    (contactFormGroup.get('tel')?.hasError('pattern') || contactFormGroup.get('tel')?.hasError('minlength'))
+                  "
+                  class="alert alert-danger"
+                  role="alert"
+                >
+                  le Numéro de téléphone invalide
+                </div>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group form-group-name">
-                <label>Sujet* <span class="required"></span></label>
-                <input type="text" class="form-control" formControlName="sujet" />
+                <label>Sujet * <span class="required"></span></label>
+                <input type="text" [(ngModel)]="sujet" class="form-control" formControlName="sujet" />
                 <div
                   *ngIf="contactFormGroup.get('sujet')?.touched && contactFormGroup.get('sujet')?.hasError('required')"
                   class="alert alert-danger"
@@ -77,18 +94,14 @@
             </div>
             <div class="col-md-12">
               <div class="form-group">
-                <label>Message* </label>
-                <textarea class="form-control" rows="9" formControlName="message"></textarea>
-                <div
-                  *ngIf="contactFormGroup.get('message')?.touched && contactFormGroup.get('message')?.hasError('required')"
-                  class="alert alert-danger"
-                  role="alert"
-                >
-                  le message est obligatoire
-                </div>
+                <label>Message * </label>
+                <textarea [(ngModel)]="message" class="form-control" rows="9" formControlName="message"></textarea>
+                <div *ngIf="alerterContact" class="alert alert-success" role="alert">Message envoyé avec succès</div>
               </div>
               <div class="form-group float-right mb-0">
-                <button type="submit" [disabled]="!contactFormGroup.valid" class="btn btn-primary btn-contact">Envoyer</button>
+                <button type="submit" (click)="contacter()" [disabled]="!contactFormGroup.valid" class="btn btn-primary btn-contact">
+                  Envoyer
+                </button>
               </div>
             </div>
           </div>
@@ -276,9 +289,33 @@
             <div class="widget__form-newsletter">
               <p>Ne manquez pas de vous abonner à nos flux d'actualités, veuillez remplir le formulaire ci-dessous</p>
               <div class="mt-3">
-                <input type="text" class="form-control mb-2" placeholder="Adresse mail" />
+                <form [formGroup]="newslettersFormGroup">
+                  <input [(ngModel)]="email" formControlName="email" type="text" class="form-control mb-2" placeholder="Adresse mail" />
+                  <div *ngIf="alerter" class="alert alert-success" role="alert">votre requête est bien enregistrée avec succès</div>
+                  <div
+                    *ngIf="newslettersFormGroup.get('email')?.touched && newslettersFormGroup.get('email')?.hasError('required')"
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    l'email est obligatoire
+                  </div>
+                  <div
+                    *ngIf="newslettersFormGroup.get('email')?.touched && newslettersFormGroup.get('email')?.hasError('email')"
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    l'email invalide
+                  </div>
 
-                <button class="btn btn-primary btn-block text-capitalize" type="button">S'incrire</button>
+                  <button
+                    [disabled]="!newslettersFormGroup.valid"
+                    (click)="newLetters()"
+                    class="btn btn-primary btn-block text-capitalize"
+                    type="button"
+                  >
+                    S'incrire
+                  </button>
+                </form>
               </div>
             </div>
           </div>

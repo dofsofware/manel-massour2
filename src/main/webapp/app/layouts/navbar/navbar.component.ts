@@ -99,6 +99,14 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.collapseNavbar();
   }
 
+  engagement(): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + 'engagement';
+    window.location.href = monurl;
+    this.collapseNavbar();
+  }
+
   apropos(): void {
     const getUrl = window.location;
     const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
