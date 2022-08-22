@@ -1107,14 +1107,6 @@
                             ></textarea>
                           </div>
                         </div>
-                        <div class="captcha">
-                          <re-captcha
-                            class="captcha_"
-                            (resolved)="resolved($event)"
-                            siteKey="6LemOXQgAAAAAPs1mjueKJNtGhSC7xjOiMMVn9fA"
-                          ></re-captcha>
-                        </div>
-                        <div *ngIf="!recaptcha_" class="alert alert-danger" role="alert">Merci de resoudre le recaptcha SVP</div>
                         <div *ngIf="alerter" class="alert alert-success" role="alert">
                           votre requête est bien enregistrée, vous serez contacté(e) dans les 24h
                         </div>

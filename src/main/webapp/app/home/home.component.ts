@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -8,25 +8,68 @@ import { default as initJs } from '../../content/assets/js/index.bundle.js';
 import $ from 'jquery';
 import { EmailService } from 'app/email.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { IPropriete } from 'app/entities/propriete/propriete.model.js';
+import { ProprieteService } from 'app/entities/propriete/service/propriete.service';
+
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
   account: Account | null = null;
+  proprietes?: IPropriete[];
   newslettersFormGroup!: FormGroup;
   alerter = false;
+  charge = false;
+  isLoading = false;
   public email: string;
   private readonly destroy$ = new Subject<void>();
 
-  constructor(private emailService: EmailService, private accountService: AccountService, private router: Router) {
+  constructor(
+    private proprieteService: ProprieteService,
+    private emailService: EmailService,
+    private accountService: AccountService,
+    private router: Router
+  ) {
     this.email = '';
+  }
+  ngAfterViewChecked(): void {
+    if (this.proprietes!.length > 0 && this.charge === false) {
+      initJs();
+      this.charge = true;
+    }
+  }
+
+  trackId(_index: number, item: IPropriete): number {
+    return item.id!;
+  }
+
+  loadAll(): void {
+    this.isLoading = true;
+
+    this.proprieteService.query().subscribe({
+      next: (res: HttpResponse<IPropriete[]>) => {
+        this.isLoading = false;
+        this.proprietes = res.body ?? [];
+      },
+      error: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  displayDetail(propriete: IPropriete): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl =
+      baseUrl + '/recherche?lat=' + String(propriete.latitude) + '&lng=' + String(propriete.longitude) + '&ref=' + propriete.reference!;
+    window.location.href = monurl;
   }
 
   ngAfterViewInit(): void {
-    initJs();
     let montimer: any;
     let running = false;
     let level = 0;
@@ -670,6 +713,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.loadAll();
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))

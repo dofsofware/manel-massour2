@@ -92,6 +92,7 @@
     "dayjs": "1.11.0",
     "jquery": "^3.6.0",
     "leaflet": "^1.8.0",
+    "lightgallery": "^2.5.0",
     "ng-recaptcha": "^9.0.0",
     "ngx-infinite-scroll": "13.0.1",
     "ngx-webstorage": "9.0.0",

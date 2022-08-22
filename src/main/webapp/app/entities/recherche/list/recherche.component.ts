@@ -15,6 +15,7 @@ import { DetailPropriete } from 'app/entities/detail-propriete/detail-propriete.
 import { TypeDeBien } from 'app/entities/enumerations/type-de-bien.model';
 import { EmailService } from 'app/email.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { BeforeSlideDetail } from 'lightgallery/lg-events';
 @Component({
   selector: 'jhi-recherche',
   templateUrl: './recherche.component.html',
@@ -24,7 +25,6 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   proprietes?: IPropriete[];
   proprieteDetail?: IPropriete;
   isLoading = false;
-  recaptcha_ = true;
   nbpUrl = true;
   entrer = true;
   map2Init = false;
@@ -41,7 +41,6 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   EmailAlerte = '';
   alertFormGroup!: FormGroup;
   commandeFormGroup!: FormGroup;
-  recaptchaContenu: string;
   private map: any;
   private map2: any;
 
@@ -51,9 +50,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     protected dataUtils: DataUtils,
     protected rechercheService: RechercheService,
     protected modalService: NgbModal
-  ) {
-    this.recaptchaContenu = '';
-  }
+  ) {}
 
   ngAfterViewChecked(): void {
     if (this.entrer === true && $('.card__box-v1').length > 0) {
@@ -937,31 +934,20 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     $('#lire_plus').addClass('visible');
   }
 
-  resolved(captchaResponse: string): void {
-    this.recaptchaContenu = captchaResponse;
-  }
-
   commander(): void {
-    if (this.recaptchaContenu === '') {
-      this.recaptcha_ = false;
-      setTimeout(() => {
-        this.recaptcha_ = true;
-      }, 3000);
-    } else {
-      this.alerter = true;
-      const ref = this.proprieteDetail?.reference;
-      const message = this.message();
-      this.commandeMAIL(this.emailCommande, this.telCommande, String(ref), String(message));
-      this.nomCommande = '';
-      this.emailCommande = '';
-      this.telCommande = '';
-      this.messageCommande = '';
-      this.commandeFormGroup.reset();
-      $('#message').val('');
-      setTimeout(() => {
-        this.alerter = false;
-      }, 6000);
-    }
+    this.alerter = true;
+    const ref = this.proprieteDetail?.reference;
+    const message = this.message();
+    this.commandeMAIL(this.emailCommande, this.telCommande, String(ref), String(message));
+    this.nomCommande = '';
+    this.emailCommande = '';
+    this.telCommande = '';
+    this.messageCommande = '';
+    this.commandeFormGroup.reset();
+    $('#message').val('');
+    setTimeout(() => {
+      this.alerter = false;
+    }, 6000);
   }
 
   tester(): void {
