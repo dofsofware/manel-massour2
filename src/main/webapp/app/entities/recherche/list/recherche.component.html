@@ -328,7 +328,9 @@
                                     <div class="col-md-4 col-lg-3 col-xl-4">
                                       <div class="card__image__header h-250">
                                         <a href="javascript:void(0)">
-                                          <div class="ribbon text-capitalize">{{ propriete.papier | changerpipe }}</div>
+                                          <div class="ribbon text-capitalize" *ngIf="propriete.papier">
+                                            {{ propriete.papier | changerpipe }}
+                                          </div>
                                           <img
                                             src="https://tech-xel.com/model/{{ propriete.urlPhotoPrincipale }}"
                                             alt=""
@@ -648,8 +650,39 @@
             <br />
 
             <div class="col-12">
-              <!-- SLIDER IMAGE DETAIL -->
-              <div class="slider__image__detail-large owl-carousel owl-theme">
+              <div class="gallery">
+                <div class="img-container">
+                  <img class="img-principale" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhotoPrincipale }}" />
+                  <div class="img-prev">
+                    <div class="img-slider">
+                      <img
+                        class="prev active img0"
+                        (click)="changeImage('0')"
+                        src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhotoPrincipale }}"
+                      />
+                    </div>
+                    <div class="img-slider">
+                      <img class="prev img1" (click)="changeImage('1')" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto1 }}" />
+                    </div>
+                    <div class="img-slider">
+                      <img class="prev img2" (click)="changeImage('2')" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto2 }}" />
+                    </div>
+                    <div class="img-slider">
+                      <img class="prev img3" (click)="changeImage('3')" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto3 }}" />
+                    </div>
+                    <div class="img-slider">
+                      <img class="prev img4" (click)="changeImage('4')" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto4 }}" />
+                    </div>
+                    <div class="img-slider">
+                      <img class="prev img5" (click)="changeImage('5')" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto5 }}" />
+                    </div>
+                    <div class="img-slider">
+                      <img class="prev img6" (click)="changeImage('6')" src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto6 }}" />
+                    </div>
+                  </div>
+                </div>
+                <!-- SLIDER IMAGE DETAIL -->
+                <!-- <div class="slider__image__detail-large owl-carousel owl-theme">
                 <div class="item">
                   <div class="slider__image__detail-large-one">
                     <img
@@ -759,9 +792,9 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="slider__image__detail-thumb owl-carousel owl-theme">
+                <!-- <div class="slider__image__detail-thumb owl-carousel owl-theme">
                 <div class="item">
                   <div class="slider__image__detail-thumb-one">
                     <img
@@ -801,360 +834,361 @@
                     <img src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhoto6 }}" alt="" class="img-fluid w-100 img-transition" />
                   </div>
                 </div>
-              </div>
-              <!-- END SLIDER IMAGE DETAIL -->
-              <div class="row">
-                <div class="col-md-9 col-lg-9">
-                  <div class="single__detail-title mt-4">
-                    <h3 class="text-capitalize">{{ proprieteDetail?.reference }}</h3>
-                    <p>{{ proprieteDetail?.adresse }}</p>
-                  </div>
-                </div>
-                <div class="col-md-3 col-lg-3">
-                  <div class="single__detail-price mt-4">
-                    <h3 class="text-capitalize text-gray">
-                      {{ proprieteDetail?.prix }} <sup>Fcfa</sup
-                      ><span *ngIf="proprieteDetail?.periode"> / {{ proprieteDetail?.periode }}</span>
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <!-- DESCRIPTION -->
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="single__detail-desc">
-                    <h6 class="text-capitalize detail-heading">description</h6>
-                    <div class="show__more" id="lire_plus">
-                      <p>
-                        {{ proprieteDetail?.description }}
-                      </p>
-
-                      <a href="javascript:void(0)" class="show__more-button" (click)="lirePlus()">Lire plus</a>
+              </div> -->
+                <!-- END SLIDER IMAGE DETAIL -->
+                <div class="row">
+                  <div class="col-md-9 col-lg-9">
+                    <div class="single__detail-title mt-4">
+                      <h3 class="text-capitalize">{{ proprieteDetail?.reference }}</h3>
+                      <p>{{ proprieteDetail?.adresse }}</p>
                     </div>
                   </div>
-                  <div class="clearfix"></div>
+                  <div class="col-md-3 col-lg-3">
+                    <div class="single__detail-price mt-4">
+                      <h3 class="text-capitalize text-gray">
+                        {{ proprieteDetail?.prix }} <sup>Fcfa</sup
+                        ><span *ngIf="proprieteDetail?.periode"> / {{ proprieteDetail?.periode }}</span>
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <!-- DESCRIPTION -->
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="single__detail-desc">
+                      <h6 class="text-capitalize detail-heading">description</h6>
+                      <div class="show__more" id="lire_plus">
+                        <p>
+                          {{ proprieteDetail?.description }}
+                        </p>
 
-                  <!-- PROPERTY DETAILS SPEC -->
-                  <div class="single__detail-features">
-                    <h6 class="text-capitalize detail-heading">Details de la propriete</h6>
-                    <!-- INFO PROPERTY DETAIL -->
-                    <div class="property__detail-info">
-                      <div class="row">
-                        <div class="col-md-6 col-lg-6">
-                          <ul class="property__detail-info-list list-unstyled">
-                            <li><b>Ref de la Propriete :</b> {{ proprieteDetail?.reference }}</li>
-                            <li>
-                              <b>Prix :</b> {{ proprieteDetail?.prix }} <sup>Fcfa</sup
-                              ><span *ngIf="proprieteDetail?.periode"> / {{ proprieteDetail?.periode }}</span>
-                            </li>
-                            <li><b>Superfice :</b> {{ proprieteDetail?.superficie }} m<sup>2</sup></li>
-                            <li *ngIf="proprieteDetail?.nombreDePieces && proprieteDetail?.nombreDePieces! > 0">
-                              <b>Nombre de pièces :</b> {{ proprieteDetail?.nombreDePieces }}
-                            </li>
-                            <li *ngIf="proprieteDetail?.nombreDeDouches && proprieteDetail?.nombreDeDouches! > 0">
-                              <b>Nombre de WC:</b> {{ proprieteDetail?.nombreDeDouches }}
-                            </li>
-                          </ul>
-                        </div>
-                        <div class="col-md-6 col-lg-6">
-                          <ul class="property__detail-info-list list-unstyled">
-                            <li *ngIf="proprieteDetail?.nombreDeGarages && proprieteDetail?.nombreDeGarages! > 0">
-                              <b>Nombre de garages :</b> {{ proprieteDetail?.nombreDeGarages }}
-                            </li>
-                            <li *ngIf="proprieteDetail?.anneeDeConstruction">
-                              <b>Date de construction :</b> {{ proprieteDetail?.anneeDeConstruction }}
-                            </li>
-                            <li><b>Type de proprièté :</b> {{ proprieteDetail?.type | changerpipe }}</li>
-                            <li *ngIf="proprieteDetail?.papier"><b>Type de papier :</b> {{ proprieteDetail?.papier | changerpipe }}</li>
-                            <li><b>Transaction :</b> {{ proprieteDetail?.modeDeTransaction | changerpipe }}</li>
-                          </ul>
-                        </div>
+                        <a href="javascript:void(0)" class="show__more-button" (click)="lirePlus()">Lire plus</a>
                       </div>
                     </div>
-                    <!-- END INFO PROPERTY DETAIL -->
-                  </div>
-                  <!-- END PROPERTY DETAILS SPEC -->
-                  <div class="clearfix"></div>
+                    <div class="clearfix"></div>
 
-                  <!-- FEATURES -->
-                  <div class="single__detail-features">
-                    <h6 class="text-capitalize detail-heading">Plus de détails</h6>
-                    <ul class="list-unstyled icon-checkbox">
-                      <li *ngIf="proprieteDetail?.accesEau">Accès à l'eau</li>
-                      <li *ngIf="proprieteDetail?.acceEelectricite">Accès à l'électricité</li>
-                      <li *ngIf="proprieteDetail?.accesADSL">Accès ADSL</li>
-                      <li *ngIf="proprieteDetail?.meuble">Propièté Meublée</li>
-                      <li *ngIf="proprieteDetail?.modeDePaiement === 'MORATOIRE'">Payable par tranche</li>
-                    </ul>
-                  </div>
-                  <!-- END FEATURES -->
+                    <!-- PROPERTY DETAILS SPEC -->
+                    <div class="single__detail-features">
+                      <h6 class="text-capitalize detail-heading">Details de la propriete</h6>
+                      <!-- INFO PROPERTY DETAIL -->
+                      <div class="property__detail-info">
+                        <div class="row">
+                          <div class="col-md-6 col-lg-6">
+                            <ul class="property__detail-info-list list-unstyled">
+                              <li><b>Ref de la Propriete :</b> {{ proprieteDetail?.reference }}</li>
+                              <li>
+                                <b>Prix :</b> {{ proprieteDetail?.prix }} <sup>Fcfa</sup
+                                ><span *ngIf="proprieteDetail?.periode"> / {{ proprieteDetail?.periode }}</span>
+                              </li>
+                              <li><b>Superfice :</b> {{ proprieteDetail?.superficie }} m<sup>2</sup></li>
+                              <li *ngIf="proprieteDetail?.nombreDePieces && proprieteDetail?.nombreDePieces! > 0">
+                                <b>Nombre de pièces :</b> {{ proprieteDetail?.nombreDePieces }}
+                              </li>
+                              <li *ngIf="proprieteDetail?.nombreDeDouches && proprieteDetail?.nombreDeDouches! > 0">
+                                <b>Nombre de WC:</b> {{ proprieteDetail?.nombreDeDouches }}
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="col-md-6 col-lg-6">
+                            <ul class="property__detail-info-list list-unstyled">
+                              <li *ngIf="proprieteDetail?.nombreDeGarages && proprieteDetail?.nombreDeGarages! > 0">
+                                <b>Nombre de garages :</b> {{ proprieteDetail?.nombreDeGarages }}
+                              </li>
+                              <li *ngIf="proprieteDetail?.anneeDeConstruction">
+                                <b>Date de construction :</b> {{ proprieteDetail?.anneeDeConstruction }}
+                              </li>
+                              <li><b>Type de proprièté :</b> {{ proprieteDetail?.type | changerpipe }}</li>
+                              <li *ngIf="proprieteDetail?.papier"><b>Type de papier :</b> {{ proprieteDetail?.papier | changerpipe }}</li>
+                              <li><b>Transaction :</b> {{ proprieteDetail?.modeDeTransaction | changerpipe }}</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END INFO PROPERTY DETAIL -->
+                    </div>
+                    <!-- END PROPERTY DETAILS SPEC -->
+                    <div class="clearfix"></div>
 
-                  <div class="single__detail-features">
-                    <h6 class="text-capitalize detail-heading">Propriète video</h6>
-                    <div class="single__detail-features-video">
-                      <figure class="mb-0">
-                        <div class="home__video-area text-center">
-                          <img src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhotoPrincipale }}" alt="" class="img-fluid" />
-                          <a href="{{ proprieteDetail?.urlVideo }}" class="play-video-1">
-                            <i class="icon fa fa-play text-white"></i>
+                    <!-- FEATURES -->
+                    <div class="single__detail-features">
+                      <h6 class="text-capitalize detail-heading">Plus de détails</h6>
+                      <ul class="list-unstyled icon-checkbox">
+                        <li *ngIf="proprieteDetail?.accesEau">Accès à l'eau</li>
+                        <li *ngIf="proprieteDetail?.acceEelectricite">Accès à l'électricité</li>
+                        <li *ngIf="proprieteDetail?.accesADSL">Accès ADSL</li>
+                        <li *ngIf="proprieteDetail?.meuble">Propièté Meublée</li>
+                        <li *ngIf="proprieteDetail?.modeDePaiement === 'MORATOIRE'">Payable par tranche</li>
+                      </ul>
+                    </div>
+                    <!-- END FEATURES -->
+
+                    <div class="single__detail-features">
+                      <h6 class="text-capitalize detail-heading">Propriète video</h6>
+                      <div class="single__detail-features-video">
+                        <figure class="mb-0">
+                          <div class="home__video-area text-center">
+                            <img src="https://tech-xel.com/model/{{ proprieteDetail?.urlPhotoPrincipale }}" alt="" class="img-fluid" />
+                            <a href="{{ proprieteDetail?.urlVideo }}" class="play-video-1">
+                              <i class="icon fa fa-play text-white"></i>
+                            </a>
+                          </div>
+                        </figure>
+                      </div>
+                    </div>
+
+                    <!-- LOCATION -->
+                    <div class="single__detail-features">
+                      <h6 class="text-capitalize detail-heading">location</h6>
+                      <!-- FILTER VERTICAL -->
+                      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                          <a
+                            class="nav-link active"
+                            id="pills-map-location-tab"
+                            data-toggle="pill"
+                            href="#pills-map-location"
+                            role="tab"
+                            aria-controls="pills-map-location"
+                            aria-selected="true"
+                          >
+                            <i class="fa fa-map-marker"></i>
                           </a>
-                        </div>
-                      </figure>
-                    </div>
-                  </div>
-
-                  <!-- LOCATION -->
-                  <div class="single__detail-features">
-                    <h6 class="text-capitalize detail-heading">location</h6>
-                    <!-- FILTER VERTICAL -->
-                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                      <li class="nav-item">
-                        <a
-                          class="nav-link active"
-                          id="pills-map-location-tab"
-                          data-toggle="pill"
-                          href="#pills-map-location"
-                          role="tab"
-                          aria-controls="pills-map-location"
-                          aria-selected="true"
-                        >
-                          <i class="fa fa-map-marker"></i>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a
-                          class="nav-link"
-                          target="_blank"
-                          href="https://www.google.com/maps/search/?api=1&query={{ proprieteDetail?.latitude }},{{
-                            proprieteDetail?.longitude
-                          }}"
-                        >
-                          <i class="fa fa-street-view"></i> <b>Suivre sur Google Maps</b>
-                        </a>
-                      </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                      <div
-                        class="tab-pane fade show active"
-                        id="pills-map-location"
-                        role="tabpanel"
-                        aria-labelledby="pills-map-location-tab"
-                      >
-                        <div id="map2" style="height: 400px; z-index: 1 !important"></div>
-                      </div>
-                    </div>
-                    <!-- END FILTER VERTICAL -->
-                  </div>
-                  <!-- END LOCATION -->
-
-                  <!-- NEARBY -->
-                  <div
-                    *ngIf="
-                      (proprieteDetail?.distancehopital && proprieteDetail?.distanceclinique) ||
-                      proprieteDetail?.distancePrimaire ||
-                      proprieteDetail?.distanceSecondaire ||
-                      proprieteDetail?.distanceLycee
-                    "
-                    class="single__detail-features"
-                  >
-                    <h6 class="text-capitalize detail-heading">qu'y a-t-il à proximité ?</h6>
-                    <div class="single__detail-features-nearby">
-                      <h6
-                        *ngIf="proprieteDetail?.distancePrimaire || proprieteDetail?.distanceSecondaire || proprieteDetail?.distanceLycee"
-                        class="text-capitalize"
-                      >
-                        <span> <i class="fa fa-building"></i></span>éducation
-                      </h6>
-                      <ul
-                        *ngIf="proprieteDetail?.distancePrimaire || proprieteDetail?.distanceSecondaire || proprieteDetail?.distanceLycee"
-                        class="list-unstyled"
-                      >
-                        <li *ngIf="proprieteDetail?.distancePrimaire && proprieteDetail?.distancePrimaire! > 0">
-                          <span>distance école primaire</span>
-                          <p>{{ proprieteDetail?.distancePrimaire }} km</p>
                         </li>
-                        <li *ngIf="proprieteDetail?.distanceSecondaire && proprieteDetail?.distanceSecondaire! > 0">
-                          <span>Distance secondaire</span>
-                          <p>{{ proprieteDetail?.distanceSecondaire }} km</p>
-                        </li>
-                        <li *ngIf="proprieteDetail?.distanceLycee && proprieteDetail?.distanceLycee! > 0">
-                          <span>Distance lycée</span>
-                          <p>{{ proprieteDetail?.distanceLycee }} km</p>
+                        <li class="nav-item">
+                          <a
+                            class="nav-link"
+                            target="_blank"
+                            href="https://www.google.com/maps/search/?api=1&query={{ proprieteDetail?.latitude }},{{
+                              proprieteDetail?.longitude
+                            }}"
+                          >
+                            <i class="fa fa-street-view"></i> <b>Suivre sur Google Maps</b>
+                          </a>
                         </li>
                       </ul>
-
-                      <h6 *ngIf="proprieteDetail?.distancehopital && proprieteDetail?.distanceclinique" class="text-capitalize">
-                        <span><i class="fa fa-ambulance"></i></span>Santé & médical
-                      </h6>
-                      <ul *ngIf="proprieteDetail?.distancehopital && proprieteDetail?.distanceclinique" class="list-unstyled">
-                        <li *ngIf="proprieteDetail?.distancehopital && proprieteDetail?.distancehopital! > 0">
-                          <span>Hôpital</span>
-                          <p>{{ proprieteDetail?.distancehopital }} km</p>
-                        </li>
-                        <li *ngIf="proprieteDetail?.distanceclinique && proprieteDetail?.distanceclinique! > 0">
-                          <span>clinique</span>
-                          <p>{{ proprieteDetail?.distanceclinique }} km</p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <!-- END NEARBY -->
-
-                  <div class="profile__agent mb-30">
-                    <div class="profile__agent__group">
-                      <div class="profile__agent__header">
-                        <div class="profile__agent__header-avatar">
-                          <figure>
-                            <img src="../../../../content/assets/images/favicon.ico" alt="" class="img-fluid" />
-                          </figure>
-
-                          <ul class="list-unstyled mb-0">
-                            <li>
-                              <h5 class="text-capitalize">BUNTU Real estate</h5>
-                            </li>
-                            <li>
-                              <a href="tel:(221) 33 456 78 90">
-                                <i class="fa fa-phone-square mr-1"></i>
-                                (221) 33 456 78 90
-                              </a>
-                            </li>
-                            <li>
-                              <a href="javascript:void(0)"><i class="fa fa-building mr-1"></i> Adresse de BUNTU Real estate</a>
-                            </li>
-                          </ul>
+                      <div class="tab-content" id="pills-tabContent">
+                        <div
+                          class="tab-pane fade show active"
+                          id="pills-map-location"
+                          role="tabpanel"
+                          aria-labelledby="pills-map-location-tab"
+                        >
+                          <div id="map2" style="height: 400px; z-index: 1 !important"></div>
                         </div>
                       </div>
-                      <form [formGroup]="commandeFormGroup">
-                        <div class="profile__agent__body">
-                          <div class="form-group">
-                            <input
-                              [(ngModel)]="nomCommande"
-                              type="text"
-                              id="nom"
-                              formControlName="nom"
-                              (input)="message()"
-                              class="form-control"
-                              placeholder="Votre nom"
-                            />
-                            <div
-                              *ngIf="commandeFormGroup.get('nom')?.touched && commandeFormGroup.get('nom')?.hasError('required')"
-                              class="alert alert-danger"
-                              role="alert"
-                            >
-                              le nom est obligatoire
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <input
-                              [(ngModel)]="telCommande"
-                              type="text"
-                              id="tel"
-                              formControlName="tel"
-                              (input)="message()"
-                              class="form-control"
-                              placeholder="Votre téléphone"
-                            />
-                            <div
-                              *ngIf="commandeFormGroup.get('tel')?.touched && commandeFormGroup.get('tel')?.hasError('required')"
-                              class="alert alert-danger"
-                              role="alert"
-                            >
-                              le Numéro de téléphone est obligatoire
-                            </div>
-                            <div
-                              *ngIf="
-                                commandeFormGroup.get('tel')?.touched &&
-                                (commandeFormGroup.get('tel')?.hasError('pattern') || commandeFormGroup.get('tel')?.hasError('minlength'))
-                              "
-                              class="alert alert-danger"
-                              role="alert"
-                            >
-                              le Numéro de téléphone invalide
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <input
-                              [(ngModel)]="emailCommande"
-                              type="text"
-                              id="email"
-                              formControlName="email"
-                              (input)="message()"
-                              class="form-control"
-                              placeholder="Votre Email"
-                            />
-                            <div
-                              *ngIf="commandeFormGroup.get('email')?.touched && commandeFormGroup.get('email')?.hasError('required')"
-                              class="alert alert-danger"
-                              role="alert"
-                            >
-                              l'email est obligatoire
-                            </div>
-                            <div
-                              *ngIf="commandeFormGroup.get('email')?.touched && commandeFormGroup.get('email')?.hasError('email')"
-                              class="alert alert-danger"
-                              role="alert"
-                            >
-                              l'email est invalide
-                            </div>
-                          </div>
-                          <div class="form-group mb-0">
-                            <textarea
-                              [(ngModel)]="messageCommande"
-                              id="message"
-                              class="form-control"
-                              rows="5"
-                              placeholder="Votre message"
-                            ></textarea>
+                      <!-- END FILTER VERTICAL -->
+                    </div>
+                    <!-- END LOCATION -->
+
+                    <!-- NEARBY -->
+                    <div
+                      *ngIf="
+                        (proprieteDetail?.distancehopital && proprieteDetail?.distanceclinique) ||
+                        proprieteDetail?.distancePrimaire ||
+                        proprieteDetail?.distanceSecondaire ||
+                        proprieteDetail?.distanceLycee
+                      "
+                      class="single__detail-features"
+                    >
+                      <h6 class="text-capitalize detail-heading">qu'y a-t-il à proximité ?</h6>
+                      <div class="single__detail-features-nearby">
+                        <h6
+                          *ngIf="proprieteDetail?.distancePrimaire || proprieteDetail?.distanceSecondaire || proprieteDetail?.distanceLycee"
+                          class="text-capitalize"
+                        >
+                          <span> <i class="fa fa-building"></i></span>éducation
+                        </h6>
+                        <ul
+                          *ngIf="proprieteDetail?.distancePrimaire || proprieteDetail?.distanceSecondaire || proprieteDetail?.distanceLycee"
+                          class="list-unstyled"
+                        >
+                          <li *ngIf="proprieteDetail?.distancePrimaire && proprieteDetail?.distancePrimaire! > 0">
+                            <span>distance école primaire</span>
+                            <p>{{ proprieteDetail?.distancePrimaire }} km</p>
+                          </li>
+                          <li *ngIf="proprieteDetail?.distanceSecondaire && proprieteDetail?.distanceSecondaire! > 0">
+                            <span>Distance secondaire</span>
+                            <p>{{ proprieteDetail?.distanceSecondaire }} km</p>
+                          </li>
+                          <li *ngIf="proprieteDetail?.distanceLycee && proprieteDetail?.distanceLycee! > 0">
+                            <span>Distance lycée</span>
+                            <p>{{ proprieteDetail?.distanceLycee }} km</p>
+                          </li>
+                        </ul>
+
+                        <h6 *ngIf="proprieteDetail?.distancehopital && proprieteDetail?.distanceclinique" class="text-capitalize">
+                          <span><i class="fa fa-ambulance"></i></span>Santé & médical
+                        </h6>
+                        <ul *ngIf="proprieteDetail?.distancehopital && proprieteDetail?.distanceclinique" class="list-unstyled">
+                          <li *ngIf="proprieteDetail?.distancehopital && proprieteDetail?.distancehopital! > 0">
+                            <span>Hôpital</span>
+                            <p>{{ proprieteDetail?.distancehopital }} km</p>
+                          </li>
+                          <li *ngIf="proprieteDetail?.distanceclinique && proprieteDetail?.distanceclinique! > 0">
+                            <span>clinique</span>
+                            <p>{{ proprieteDetail?.distanceclinique }} km</p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <!-- END NEARBY -->
+
+                    <div class="profile__agent mb-30">
+                      <div class="profile__agent__group">
+                        <div class="profile__agent__header">
+                          <div class="profile__agent__header-avatar">
+                            <figure>
+                              <img src="../../../../content/assets/images/favicon.ico" alt="" class="img-fluid" />
+                            </figure>
+
+                            <ul class="list-unstyled mb-0">
+                              <li>
+                                <h5 class="text-capitalize">BUNTU Real estate</h5>
+                              </li>
+                              <li>
+                                <a href="tel:(221) 33 456 78 90">
+                                  <i class="fa fa-phone-square mr-1"></i>
+                                  (221) 33 456 78 90
+                                </a>
+                              </li>
+                              <li>
+                                <a href="javascript:void(0)"><i class="fa fa-building mr-1"></i> Adresse de BUNTU Real estate</a>
+                              </li>
+                            </ul>
                           </div>
                         </div>
-                        <div *ngIf="alerter" class="alert alert-success" role="alert">
-                          votre requête est bien enregistrée, vous serez contacté(e) dans les 24h
-                        </div>
-                        <div class="profile__agent__footer">
-                          <div class="form-group mb-0">
-                            <button
-                              [disabled]="!commandeFormGroup.valid"
-                              (click)="commander()"
-                              class="btn btn-primary text-capitalize btn-block"
-                            >
-                              Envoyer le message <i class="fa fa-paper-plane ml-1"></i>
-                            </button>
+                        <form [formGroup]="commandeFormGroup">
+                          <div class="profile__agent__body">
+                            <div class="form-group">
+                              <input
+                                [(ngModel)]="nomCommande"
+                                type="text"
+                                id="nom"
+                                formControlName="nom"
+                                (input)="message()"
+                                class="form-control"
+                                placeholder="Votre nom"
+                              />
+                              <div
+                                *ngIf="commandeFormGroup.get('nom')?.touched && commandeFormGroup.get('nom')?.hasError('required')"
+                                class="alert alert-danger"
+                                role="alert"
+                              >
+                                le nom est obligatoire
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <input
+                                [(ngModel)]="telCommande"
+                                type="text"
+                                id="tel"
+                                formControlName="tel"
+                                (input)="message()"
+                                class="form-control"
+                                placeholder="Votre téléphone"
+                              />
+                              <div
+                                *ngIf="commandeFormGroup.get('tel')?.touched && commandeFormGroup.get('tel')?.hasError('required')"
+                                class="alert alert-danger"
+                                role="alert"
+                              >
+                                le Numéro de téléphone est obligatoire
+                              </div>
+                              <div
+                                *ngIf="
+                                  commandeFormGroup.get('tel')?.touched &&
+                                  (commandeFormGroup.get('tel')?.hasError('pattern') || commandeFormGroup.get('tel')?.hasError('minlength'))
+                                "
+                                class="alert alert-danger"
+                                role="alert"
+                              >
+                                le Numéro de téléphone invalide
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <input
+                                [(ngModel)]="emailCommande"
+                                type="text"
+                                id="email"
+                                formControlName="email"
+                                (input)="message()"
+                                class="form-control"
+                                placeholder="Votre Email"
+                              />
+                              <div
+                                *ngIf="commandeFormGroup.get('email')?.touched && commandeFormGroup.get('email')?.hasError('required')"
+                                class="alert alert-danger"
+                                role="alert"
+                              >
+                                l'email est obligatoire
+                              </div>
+                              <div
+                                *ngIf="commandeFormGroup.get('email')?.touched && commandeFormGroup.get('email')?.hasError('email')"
+                                class="alert alert-danger"
+                                role="alert"
+                              >
+                                l'email est invalide
+                              </div>
+                            </div>
+                            <div class="form-group mb-0">
+                              <textarea
+                                [(ngModel)]="messageCommande"
+                                id="message"
+                                class="form-control"
+                                rows="5"
+                                placeholder="Votre message"
+                              ></textarea>
+                            </div>
                           </div>
-                        </div>
-                      </form>
+                          <div *ngIf="alerter" class="alert alert-success" role="alert">
+                            votre requête est bien enregistrée, vous serez contacté(e) dans les 24h
+                          </div>
+                          <div class="profile__agent__footer">
+                            <div class="form-group mb-0">
+                              <button
+                                [disabled]="!commandeFormGroup.valid"
+                                (click)="commander()"
+                                class="btn btn-primary text-capitalize btn-block"
+                              >
+                                Envoyer le message <i class="fa fa-paper-plane ml-1"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <!-- END DESCRIPTION -->
               </div>
-              <!-- END DESCRIPTION -->
             </div>
+            <!-- END DETAIL -->
           </div>
-          <!-- END DETAIL -->
         </div>
       </div>
     </div>
   </div>
-</div>
-<!-- END MAPS -->
-<!-- Footer  -->
-<footer id="footer">
-  <!-- Footer Bottom -->
-  <div class="bg__footer-bottom-v1">
-    <div class="container">
-      <div class="row flex-column-reverse flex-md-row">
-        <div class="col-md-6">
-          <span>
-            © 2022 BUNTU real estate by
-            <a href="https://www.tech-xel.com/" target="_blank">tech xel</a>
-          </span>
+  <!-- END MAPS -->
+  <!-- Footer  -->
+  <footer id="footer">
+    <!-- Footer Bottom -->
+    <div class="bg__footer-bottom-v1">
+      <div class="container">
+        <div class="row flex-column-reverse flex-md-row">
+          <div class="col-md-6">
+            <span>
+              © 2022 BUNTU real estate by
+              <a href="https://www.tech-xel.com/" target="_blank">tech xel</a>
+            </span>
+          </div>
         </div>
       </div>
     </div>
+  </footer>
+  <!-- End Footer  -->
+  <button style="display: none" href="javascript:void(0)" id="sansAdresse" (click)="reinitialiserResultat()"></button>
+  <div style="display: none">
+    <input type="text" id="lng" /><input type="text" id="lat" />
+    <button id="btnGoTo" (click)="goto()"></button>
   </div>
-</footer>
-<!-- End Footer  -->
-<button style="display: none" href="javascript:void(0)" id="sansAdresse" (click)="reinitialiserResultat()"></button>
-<div style="display: none">
-  <input type="text" id="lng" /><input type="text" id="lat" />
-  <button id="btnGoTo" (click)="goto()"></button>
 </div>

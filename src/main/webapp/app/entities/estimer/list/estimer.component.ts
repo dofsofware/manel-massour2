@@ -30,6 +30,7 @@ export class EstimerComponent implements OnInit {
       this.alerter = false;
     }, 3000);
   }
+
   newsletterMAIL(email: string): void {
     this.emailService
       .envoyeremail(
@@ -112,5 +113,12 @@ export class EstimerComponent implements OnInit {
     `
       )
       .subscribe();
+  }
+
+  allerA(cat: string): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + `recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=${cat}&carte=false&sansfiltre=true`;
+    window.location.href = monurl;
   }
 }

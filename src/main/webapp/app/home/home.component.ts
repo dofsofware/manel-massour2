@@ -65,7 +65,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
     const getUrl = window.location;
     const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
     const monurl =
-      baseUrl + '/recherche?lat=' + String(propriete.latitude) + '&lng=' + String(propriete.longitude) + '&ref=' + propriete.reference!;
+      baseUrl +
+      '/recherche?lat=' +
+      String(propriete.latitude) +
+      '&lng=' +
+      String(propriete.longitude) +
+      '&sansfiltre=true&carte=false&ref=' +
+      propriete.reference!;
+    window.location.href = monurl;
+  }
+
+  allerA(cat: string): void {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
+    const monurl = baseUrl + `recherche?lat=14.656875015645937&lng=-14.833755006747824&categories=${cat}&carte=false&sansfiltre=true`;
     window.location.href = monurl;
   }
 

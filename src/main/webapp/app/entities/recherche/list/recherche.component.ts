@@ -59,7 +59,18 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     $('.bluebox').css({
-      width: `${$('.slider__image__detail-large-one').width()!}px`,
+      width: `${$('.gallery').width()!}px`,
+    });
+
+    $('.img-principale').css({
+      width: `${$('.gallery').width()!}px`,
+      height: `${$('.gallery').width()! - 200}px`,
+    });
+
+    $('.prev').css({
+      width: `${$('.gallery').width()! / 7 - 2}px`,
+      height: `90px`,
+      margin: `1px`,
     });
 
     if (this.nbpUrl === true && $('.card__box-v1').length > 0) {
@@ -860,6 +871,8 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     } else {
       urlCoordonnees.searchParams.set('ref', this.proprieteDetail.reference!);
     }
+    urlCoordonnees.searchParams.set('lat', String(this.proprieteDetail.latitude!));
+    urlCoordonnees.searchParams.set('lng', String(this.proprieteDetail.longitude!));
     window.history.pushState('object or string', 'Recherches', String(urlCoordonnees));
     $('#resultList').hide(0);
     $('#detail').show(0);
@@ -903,6 +916,13 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     $('#map2 .leaflet-popup').remove();
     this.map2.setView([this.proprieteDetail.latitude!, this.proprieteDetail.longitude!], 17);
     marker.addTo(this.map2);
+    $('.img0').addClass('active');
+    $('.img1').removeClass('active');
+    $('.img2').removeClass('active');
+    $('.img3').removeClass('active');
+    $('.img4').removeClass('active');
+    $('.img5').removeClass('active');
+    $('.img6').removeClass('active');
     initJs();
   }
 
@@ -1386,6 +1406,73 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
     `
       )
       .subscribe();
+  }
+
+  changeImage(src: string): void {
+    if (src === '0') {
+      $('.img0').addClass('active');
+      $('.img1').removeClass('active');
+      $('.img2').removeClass('active');
+      $('.img3').removeClass('active');
+      $('.img4').removeClass('active');
+      $('.img5').removeClass('active');
+      $('.img6').removeClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhotoPrincipale!}`);
+    } else if (src === '1') {
+      $('.img0').removeClass('active');
+      $('.img1').addClass('active');
+      $('.img2').removeClass('active');
+      $('.img3').removeClass('active');
+      $('.img4').removeClass('active');
+      $('.img5').removeClass('active');
+      $('.img6').removeClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto1!}`);
+    } else if (src === '2') {
+      $('.img0').removeClass('active');
+      $('.img1').removeClass('active');
+      $('.img2').addClass('active');
+      $('.img3').removeClass('active');
+      $('.img4').removeClass('active');
+      $('.img5').removeClass('active');
+      $('.img6').removeClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto2!}`);
+    } else if (src === '3') {
+      $('.img0').removeClass('active');
+      $('.img1').removeClass('active');
+      $('.img2').removeClass('active');
+      $('.img3').addClass('active');
+      $('.img4').removeClass('active');
+      $('.img5').removeClass('active');
+      $('.img6').removeClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto3!}`);
+    } else if (src === '4') {
+      $('.img0').removeClass('active');
+      $('.img1').removeClass('active');
+      $('.img2').removeClass('active');
+      $('.img3').removeClass('active');
+      $('.img4').addClass('active');
+      $('.img5').removeClass('active');
+      $('.img6').removeClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto4!}`);
+    } else if (src === '5') {
+      $('.img0').removeClass('active');
+      $('.img1').removeClass('active');
+      $('.img2').removeClass('active');
+      $('.img3').removeClass('active');
+      $('.img4').removeClass('active');
+      $('.img5').addClass('active');
+      $('.img6').removeClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto5!}`);
+    } else if (src === '6') {
+      $('.img0').removeClass('active');
+      $('.img1').removeClass('active');
+      $('.img2').removeClass('active');
+      $('.img3').removeClass('active');
+      $('.img4').removeClass('active');
+      $('.img5').removeClass('active');
+      $('.img6').addClass('active');
+      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto6!}`);
+    }
   }
 
   newsletterMAIL(email: string): void {

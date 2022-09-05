@@ -28892,3 +28892,22 @@ body.offcanvas-active {
 }
 
 /*# sourceMappingURL=styles.css.map*/
+
+.img-prev {
+  margin-top: 4px;
+  display: flex;
+}
+.prev {
+  cursor: pointer;
+  border: solid 3px var(--secondary);
+  opacity: 0.7;
+}
+
+.img-slider > .active {
+  border: solid 3px var(--primary);
+  opacity: 1;
+}
+
+.img-principale {
+  max-height: 500px;
+}
