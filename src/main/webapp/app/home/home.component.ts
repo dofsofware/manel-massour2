@@ -679,7 +679,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://ressources.buntu.sn/model/logo_v6.png"
+			src="http://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;
@@ -802,7 +802,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://ressources.buntu.sn/model/logo_v6.png"
+			src="http://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;
