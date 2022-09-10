@@ -454,7 +454,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
                                                       )}</div>`
                                                     : ''
                                                 }
-                                                <img src="https://tech-xel.com/model/${this.proprietes[i]
+                                                <img src="https://ressources.buntu.sn/model/${this.proprietes[i]
                                                   .urlPhotoPrincipale!}" alt="" class="img-fluid w100 img-transition">
                                                 <div class="info">${this.reecriturePapier(
                                                   String(this.proprietes[i].modeDeTransaction!)
@@ -1051,7 +1051,13 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
   sansOptionFiltre(): void {
     $('#footer').hide();
     $('#zoneFiltreOptions').hide();
-    $('#map').hide();
+    const urlCoordonnees = new URL(window.location.href);
+    const ref = urlCoordonnees.searchParams.get('ref');
+    if (!ref) {
+      $('#map').hide();
+    } else {
+      $('#map').show();
+    }
     $('.grilleVersion2').removeClass('col-md-6');
     $('.grilleVersion2').addClass('col-md-4');
   }
@@ -1179,7 +1185,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://tech-xel.com/model/logo_v6.png"
+			src="https://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;
@@ -1266,7 +1272,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://tech-xel.com/model/logo_v6.png"
+			src="https://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;
@@ -1352,7 +1358,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://tech-xel.com/model/logo_v6.png"
+			src="https://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;
@@ -1417,7 +1423,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').removeClass('active');
       $('.img5').removeClass('active');
       $('.img6').removeClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhotoPrincipale!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhotoPrincipale!}`);
     } else if (src === '1') {
       $('.img0').removeClass('active');
       $('.img1').addClass('active');
@@ -1426,7 +1432,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').removeClass('active');
       $('.img5').removeClass('active');
       $('.img6').removeClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto1!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhoto1!}`);
     } else if (src === '2') {
       $('.img0').removeClass('active');
       $('.img1').removeClass('active');
@@ -1435,7 +1441,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').removeClass('active');
       $('.img5').removeClass('active');
       $('.img6').removeClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto2!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhoto2!}`);
     } else if (src === '3') {
       $('.img0').removeClass('active');
       $('.img1').removeClass('active');
@@ -1444,7 +1450,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').removeClass('active');
       $('.img5').removeClass('active');
       $('.img6').removeClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto3!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhoto3!}`);
     } else if (src === '4') {
       $('.img0').removeClass('active');
       $('.img1').removeClass('active');
@@ -1453,7 +1459,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').addClass('active');
       $('.img5').removeClass('active');
       $('.img6').removeClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto4!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhoto4!}`);
     } else if (src === '5') {
       $('.img0').removeClass('active');
       $('.img1').removeClass('active');
@@ -1462,7 +1468,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').removeClass('active');
       $('.img5').addClass('active');
       $('.img6').removeClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto5!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhoto5!}`);
     } else if (src === '6') {
       $('.img0').removeClass('active');
       $('.img1').removeClass('active');
@@ -1471,7 +1477,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
       $('.img4').removeClass('active');
       $('.img5').removeClass('active');
       $('.img6').addClass('active');
-      $('.img-principale').attr('src', `https://tech-xel.com/model/${this.proprieteDetail!.urlPhoto6!}`);
+      $('.img-principale').attr('src', `https://ressources.buntu.sn/model/${this.proprieteDetail!.urlPhoto6!}`);
     }
   }
 
@@ -1506,7 +1512,7 @@ export class RechercheComponent implements OnInit, AfterViewInit, AfterViewCheck
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://tech-xel.com/model/logo_v6.png"
+			src="https://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;

@@ -22,6 +22,7 @@ import { GlobalPartageService } from 'app/shared/global-partage.service';
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
   rechercheAcceuil!: FormGroup;
+  index = 0;
   inProduction?: boolean;
   isNavbarCollapsed = true;
   languages = LANGUAGES;
@@ -44,9 +45,21 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     }
   }
   ngAfterViewInit(): void {
-    autoComp();
     this.globalPartageService.AutoLogin().subscribe();
+    autoComp();
+    //initJs();
   }
+  // autoLog(): void{
+  //   if(this.index < 10){
+  //     setTimeout(() => {
+  //       this.globalPartageService.AutoLogin().subscribe();
+  //       if (this.account?.login === undefined) {
+  //         this.autoLog();
+  //       }
+  //       this.index++;
+  //     }, 1000);
+  //   }
+  // }
 
   ngOnInit(): void {
     this.globalPartageService.AutoLogin().subscribe();
@@ -62,6 +75,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     this.accountService.getAuthenticationState().subscribe(account => {
       this.account = account;
     });
+    this.globalPartageService.AutoLogin().subscribe();
+    // this.autoLog();
   }
 
   changeLanguage(languageKey: string): void {

@@ -12,6 +12,7 @@ import { IPropriete } from 'app/entities/propriete/propriete.model.js';
 import { ProprieteService } from 'app/entities/propriete/service/propriete.service';
 
 import { HttpResponse } from '@angular/common/http';
+import { GlobalPartageService } from 'app/shared/global-partage.service';
 
 @Component({
   selector: 'jhi-home',
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
   alerter = false;
   charge = false;
   isLoading = false;
+  encoure = false;
   public email: string;
   private readonly destroy$ = new Subject<void>();
 
@@ -32,14 +34,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
     private proprieteService: ProprieteService,
     private emailService: EmailService,
     private accountService: AccountService,
-    private router: Router
+    private router: Router,
+    private globalPartageService: GlobalPartageService
   ) {
     this.email = '';
+    this.proprietes = [];
   }
   ngAfterViewChecked(): void {
-    if (this.proprietes!.length > 0 && this.charge === false) {
+    if (this.proprietes!.length > 0 && this.account?.login !== undefined && this.charge === false) {
       initJs();
       this.charge = true;
+    }
+    if (this.account?.login === 'admin' && this.encoure === false) {
+      this.encoure = true;
+      this.loadAll();
     }
   }
 
@@ -49,7 +57,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
 
   loadAll(): void {
     this.isLoading = true;
-
+    this.charge === false;
+    this.proprietes = [];
     this.proprieteService.query().subscribe({
       next: (res: HttpResponse<IPropriete[]>) => {
         this.isLoading = false;
@@ -66,11 +75,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
     const baseUrl = getUrl.protocol + '//' + getUrl.host + '/';
     const monurl =
       baseUrl +
-      '/recherche?lat=' +
+      'recherche?lat=' +
       String(propriete.latitude) +
       '&lng=' +
       String(propriete.longitude) +
-      '&sansfiltre=true&carte=false&ref=' +
+      '&sansfiltre=true&ref=' +
       propriete.reference!;
     window.location.href = monurl;
   }
@@ -567,7 +576,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
         if (lastText !== 'EXPOSER UN BIEN') {
           addMsg('Exposer un bien');
         }
-        alert('exposer');
+        typing(1900);
+        setTimeout(addResponseMsg, 2000, 'Veuillez trouver toutes nos coordonnées à la page contact');
       }
     }
 
@@ -669,7 +679,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://tech-xel.com/model/logo_v6.png"
+			src="https://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;
@@ -723,10 +733,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
         )
         .subscribe();
     };
+    this.loadAll();
   }
 
   ngOnInit(): void {
-    this.loadAll();
+    // if(this.account?.login === undefined){
+    //   this.globalPartageService.AutoLogin().subscribe();
+    // }
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
@@ -734,6 +747,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
     this.newslettersFormGroup = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
     });
+    // this.loadAll();
+    // initJs();
   }
 
   newLetters(): void {
@@ -787,7 +802,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit, AfterVie
 		<td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;
 			padding-top: 20px;" class="hero"><a target="_blank" style="text-decoration: none;"
 			href="https://www.tech-xel.com"><img border="0" vspace="0" hspace="0"
-			src="https://tech-xel.com/model/logo_v6.png"
+			src="https://ressources.buntu.sn/model/logo_v6.png"
 			alt="Please enable images to view this content" title="Tech Xel"
 			width="560" style="
 			width: 100%;

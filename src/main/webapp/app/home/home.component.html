@@ -16,8 +16,12 @@
           <div class="item" *ngFor="let propriete of proprietes; trackBy: trackId">
             <div class="card__image card__box" (click)="displayDetail(propriete)">
               <div class="card__image-header h-250">
-                <div class="ribbon text-capitalize">{{ propriete.papier | changerpipehome }}</div>
-                <img src="https://tech-xel.com/model/{{ propriete.urlPhotoPrincipale }}" alt="" class="img-fluid w100 img-transition" />
+                <div class="ribbon text-capitalize" *ngIf="propriete.papier">{{ propriete.papier | changerpipehome }}</div>
+                <img
+                  src="https://ressources.buntu.sn/model/{{ propriete.urlPhotoPrincipale }}"
+                  alt=""
+                  class="img-fluid w100 img-transition"
+                />
                 <div class="info">{{ propriete.modeDeTransaction | changerpipehome }}</div>
               </div>
               <div class="card__image-body">
